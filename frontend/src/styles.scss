@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import './themes.scss';
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: 'Inter', 'Roboto', "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// Global styles
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Print styles
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-full-width {
+    width: 100% !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .mat-sidenav-container {
+    background: white !important;
+  }
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -31,5 +31,18 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build:
+      context: ..
+      dockerfile: ops/frontend.Dockerfile
+    container_name: measurements-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+
 volumes:
   zauiz-measurements-db:

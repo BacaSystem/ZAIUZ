@@ -1,0 +1,99 @@
+<div class="admin-drawer">
+  <!-- Header -->
+  <mat-toolbar class="drawer-header">
+    <span>Admin Panel</span>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Content -->
+  <div class="drawer-content">
+    <mat-tab-group (selectedTabChange)="onTabChanged($event.index)">
+      
+      <!-- Series Management -->
+      <mat-tab label="Series">
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Manage Series</mat-card-title>
+              <mat-card-subtitle>Create, edit, and delete measurement series</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>Series management functionality will be implemented here.</p>
+              <p>Features include:</p>
+              <ul>
+                <li>Add new series with name, min/max values, and color</li>
+                <li>Edit existing series properties</li>
+                <li>Delete series (with confirmation)</li>
+                <li>Validate min/max ranges</li>
+              </ul>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary">
+                <mat-icon>add</mat-icon>
+                Add Series
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Measurements Management -->
+      <mat-tab label="Measurements">
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Manage Measurements</mat-card-title>
+              <mat-card-subtitle>Add, edit, and delete individual measurements</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>Measurement management functionality will be implemented here.</p>
+              <p>Features include:</p>
+              <ul>
+                <li>Add new measurements to existing series</li>
+                <li>Edit measurement values and timestamps</li>
+                <li>Delete measurements</li>
+                <li>Bulk import from CSV/JSON</li>
+                <li>Validate values against series ranges</li>
+              </ul>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary">
+                <mat-icon>add</mat-icon>
+                Add Measurement
+              </button>
+              <button mat-raised-button>
+                <mat-icon>upload</mat-icon>
+                Import Data
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Settings -->
+      <mat-tab label="Settings">
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Application Settings</mat-card-title>
+              <mat-card-subtitle>Configure application preferences</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>Application settings will be implemented here.</p>
+              <p>Features include:</p>
+              <ul>
+                <li>Default chart colors and themes</li>
+                <li>Data retention policies</li>
+                <li>Export/import formats</li>
+                <li>User management</li>
+              </ul>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="table-container">
+  <!-- Header -->
+  <div class="table-header">
+    <h3>Measurements</h3>
+    <div class="header-actions">
+      <button mat-icon-button (click)="onRefresh()" [disabled]="isLoading()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="table-loading" *ngIf="isLoading()">
+    <mat-spinner diameter="32"></mat-spinner>
+    <span>Loading measurements...</span>
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-wrapper" [class.loading]="isLoading()">
+    <table mat-table [dataSource]="dataSource" matSort class="measurements-table">
+      
+      <!-- Series Column -->
+      <ng-container matColumnDef="series">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="seriesId">Series</th>
+        <td mat-cell *matCellDef="let measurement" 
+            [class.selected-row]="isRowSelected(measurement)"
+            (click)="onRowClick(measurement)">
+          <div class="series-cell">
+            <span class="series-color-indicator" 
+                  [style.background-color]="getSeriesColor(measurement.seriesId)"></span>
+            <span class="series-name">{{ getSeriesName(measurement.seriesId) }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Value Column -->
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="value">Value</th>
+        <td mat-cell *matCellDef="let measurement"
+            [class.selected-row]="isRowSelected(measurement)"
+            (click)="onRowClick(measurement)">
+          <span class="value-cell">{{ formatValue(measurement.value) }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Timestamp Column -->
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="timestamp">Timestamp</th>
+        <td mat-cell *matCellDef="let measurement"
+            [class.selected-row]="isRowSelected(measurement)"
+            (click)="onRowClick(measurement)">
+          <span class="timestamp-cell">{{ formatTimestamp(measurement.timestamp) }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let measurement"
+            [class.selected-row]="isRowSelected(measurement)">
+          <button mat-icon-button 
+                  (click)="onRowClick(measurement); $event.stopPropagation()"
+                  [class.selected]="isRowSelected(measurement)">
+            <mat-icon>{{ isRowSelected(measurement) ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [class.selected-row]="isRowSelected(row)"
+          (click)="onRowClick(row)"></tr>
+    </table>
+
+    <!-- Empty State -->
+    <div class="table-empty" *ngIf="!isLoading() && dataSource.data.length === 0">
+      <mat-icon>table_chart</mat-icon>
+      <p>No measurements found</p>
+      <p class="hint">Try adjusting your filters or date range</p>
+    </div>
+  </div>
+
+  <!-- Paginator -->
+  <mat-paginator 
+    [length]="totalElements()"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[25, 50, 100, 200]"
+    showFirstLastButtons
+    aria-label="Select page of measurements">
+  </mat-paginator>
+</div>

@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,18 +36,17 @@ public class MeasurementController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Measurement>> query(
+    public ResponseEntity<Page<MeasurementDto>> query(
             @RequestParam(required = false) List<UUID> seriesIds,
             @RequestParam(required = false) OffsetDateTime from,
             @RequestParam(required = false) OffsetDateTime to,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
 
-        return new ResponseEntity<>(measurementService.query(seriesIds, from, to, PageRequest.of(page, size, Sort.by("timestamp").ascending())),
-                                    HttpStatus.OK);
-//        return new ResponseEntity<>(measurements.stream().map(
-//                m -> modelMapper.map(m, MeasurementDto.class)
-//        ).collect(Collectors.toList()), HttpStatus.OK);
+        Page<Measurement> measurementPage = measurementService.query(seriesIds, from, to, PageRequest.of(page, size, Sort.by("timestamp").ascending()));
+        Page<MeasurementDto> dtoPage = measurementPage.map(m -> modelMapper.map(m, MeasurementDto.class));
+
+        return ResponseEntity.ok(dtoPage);
     }
 //
 //    @GetMapping

@@ -1,0 +1,144 @@
+.filter-toolbar {
+  position: sticky;
+  top: 64px; // Height of navbar
+  z-index: 999;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  min-height: 80px;
+  padding: 0 1rem;
+
+  &.dark-theme {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.filter-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  flex-wrap: wrap;
+
+  @media (max-width: 1200px) {
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.filter-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary-color);
+}
+
+.series-chips {
+  max-width: 400px;
+
+  mat-chip-listbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  mat-chip-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 2px solid;
+    border-radius: 16px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &.mat-mdc-chip-selected {
+      opacity: 1;
+      font-weight: 500;
+    }
+
+    &:not(.mat-mdc-chip-selected) {
+      opacity: 0.6;
+    }
+  }
+}
+
+.series-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.date-range-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quick-range-toggle {
+  .mat-button-toggle {
+    border-radius: 4px !important;
+  }
+}
+
+.date-pickers {
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.date-field {
+  width: 150px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 100px;
+
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}

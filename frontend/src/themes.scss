@@ -1,0 +1,22 @@
+// Custom theme variables
+:root {
+  --primary-color: #4D96FF;
+  --accent-color: #FF6B6B;
+  --success-color: #2ec4b6;
+  --surface-color: #ffffff;
+  --background-color: #fafafa;
+  --text-color: rgba(0, 0, 0, 0.87);
+  --text-secondary-color: rgba(0, 0, 0, 0.54);
+}
+
+.dark-theme {
+  --surface-color: #424242;
+  --background-color: #303030;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --text-secondary-color: rgba(255, 255, 255, 0.54);
+}
+
+// Chart color palette for series
+:root {
+  --chart-colors: #4D96FF, #FF6B6B, #2ec4b6, #FFA726, #9C27B0, #4CAF50, #FF9800, #E91E63;
+}

@@ -1,0 +1,41 @@
+<mat-toolbar class="navbar">
+  <div class="navbar-content">
+    <!-- Left side - Logo/Brand -->
+    <div class="navbar-brand">
+      <a routerLink="/" class="brand-link">
+        <mat-icon class="brand-icon">assessment</mat-icon>
+        <span class="brand-text">Measurements Dashboard</span>
+      </a>
+    </div>
+
+    <!-- Right side - Actions -->
+    <div class="navbar-actions">
+      <!-- Theme Toggle -->
+      <div class="theme-toggle">
+        <mat-icon>light_mode</mat-icon>
+        <mat-slide-toggle 
+          [checked]="isDarkTheme$ | async"
+          (change)="onThemeToggle()"
+          color="accent">
+        </mat-slide-toggle>
+        <mat-icon>dark_mode</mat-icon>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <button mat-button (click)="onNavigateToAdmin()">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin
+      </button>
+
+      <button mat-button (click)="onNavigateToLogin()">
+        <mat-icon>login</mat-icon>
+        Sign In
+      </button>
+
+      <button mat-button (click)="onLogout()" class="logout-button">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </div>
+  </div>
+</mat-toolbar>

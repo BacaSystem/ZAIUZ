@@ -1,0 +1,129 @@
+.admin-drawer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-color);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.drawer-header {
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  min-height: 64px;
+
+  span {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  button {
+    color: white;
+  }
+}
+
+.drawer-content {
+  flex: 1;
+  overflow: auto;
+  padding: 0;
+
+  mat-tab-group {
+    height: 100%;
+
+    .mat-mdc-tab-header {
+      background-color: var(--surface-color);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+  }
+}
+
+.tab-content {
+  padding: 1.5rem;
+  height: calc(100vh - 200px);
+  overflow: auto;
+
+  mat-card {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    mat-card-header {
+      margin-bottom: 1rem;
+
+      mat-card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+
+      mat-card-subtitle {
+        color: var(--text-secondary-color);
+      }
+    }
+
+    mat-card-content {
+      p {
+        margin: 0 0 1rem 0;
+        line-height: 1.5;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 1.5rem;
+
+        li {
+          margin-bottom: 0.5rem;
+          color: var(--text-secondary-color);
+        }
+      }
+    }
+
+    mat-card-actions {
+      display: flex;
+      gap: 1rem;
+      padding-top: 1rem;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        mat-icon {
+          font-size: 18px;
+          height: 18px;
+          width: 18px;
+        }
+      }
+    }
+  }
+}
+
+// Dark theme support
+.dark-theme .admin-drawer {
+  .drawer-header {
+    background-color: var(--primary-color);
+  }
+
+  .drawer-content {
+    .mat-mdc-tab-header {
+      background-color: var(--surface-color);
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .admin-drawer {
+    width: 100vw;
+  }
+
+  .tab-content {
+    padding: 1rem;
+    height: calc(100vh - 180px);
+  }
+}

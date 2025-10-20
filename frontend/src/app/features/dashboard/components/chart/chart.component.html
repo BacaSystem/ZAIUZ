@@ -1,0 +1,21 @@
+<div class="chart-container">
+  <div class="chart-loading" *ngIf="isLoading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Loading chart data...</span>
+  </div>
+
+  <div class="chart-wrapper" [class.loading]="isLoading()">
+    <canvas
+      baseChart
+      type="line"
+      [data]="chartData()"
+      [options]="chartOptions">
+    </canvas>
+  </div>
+
+  <div class="chart-empty" *ngIf="!isLoading() && chartData().datasets.length === 0">
+    <mat-icon>insert_chart</mat-icon>
+    <p>No data available for the selected filters</p>
+    <p class="hint">Try adjusting your series selection or date range</p>
+  </div>
+</div>

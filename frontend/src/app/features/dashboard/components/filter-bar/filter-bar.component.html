@@ -1,0 +1,85 @@
+<form [formGroup]="filterForm">
+  <mat-toolbar class="filter-toolbar">
+    <div class="filter-content">
+      <!-- Series Selection -->
+      <div class="filter-group">
+        <label class="filter-label">Series:</label>
+        <div class="series-chips">
+          <mat-chip-listbox formControlName="selectedSeries" multiple>
+            <mat-chip-option 
+              *ngFor="let series of availableSeries()" 
+              [value]="series.id"
+              [style.background-color]="series.color + '20'"
+              [style.border-color]="series.color">
+              <span class="series-color-dot" [style.background-color]="series.color"></span>
+              {{ series.name }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
+      </div>
+
+      <!-- Date Range -->
+      <div class="filter-group">
+        <label class="filter-label">Date Range:</label>
+        <div class="date-range-container">
+          <!-- Quick Range Buttons -->
+          <mat-button-toggle-group 
+            formControlName="quickRange"
+            (change)="onQuickRangeChanged($event.value)"
+            class="quick-range-toggle">
+            <mat-button-toggle value="7d">7 Days</mat-button-toggle>
+            <mat-button-toggle value="30d">30 Days</mat-button-toggle>
+            <mat-button-toggle value="custom">Custom</mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <!-- Date Pickers -->
+          <div class="date-pickers" *ngIf="filterForm.get('quickRange')?.value === 'custom'">
+            <mat-form-field appearance="outline" class="date-field">
+              <mat-label>From</mat-label>
+              <input 
+                matInput 
+                [matDatepicker]="fromPicker" 
+                formControlName="dateFrom"
+                (dateChange)="onDateChanged()">
+              <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
+              <mat-datepicker #fromPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="date-field">
+              <mat-label>To</mat-label>
+              <input 
+                matInput 
+                [matDatepicker]="toPicker" 
+                formControlName="dateTo"
+                (dateChange)="onDateChanged()">
+              <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+              <mat-datepicker #toPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="onRefresh()">
+          <mat-icon>refresh</mat-icon>
+          Refresh
+        </button>
+
+        <button mat-raised-button (click)="onPrint()">
+          <mat-icon>print</mat-icon>
+          Print
+        </button>
+
+        <button 
+          *ngIf="isAdmin" 
+          mat-raised-button 
+          color="accent" 
+          (click)="onToggleAdmin()">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Admin
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+</form>

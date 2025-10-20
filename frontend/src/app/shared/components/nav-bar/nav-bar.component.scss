@@ -1,0 +1,146 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  .mat-toolbar {
+    background: inherit;
+    color: inherit;
+  }
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+    font-size: 1.25rem;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    .brand-icon {
+      font-size: 28px;
+      height: 28px;
+      width: 28px;
+    }
+
+    .brand-text {
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+  }
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    opacity: 0.7;
+  }
+
+  mat-slide-toggle {
+    .mat-slide-toggle-thumb {
+      background-color: white;
+    }
+
+    .mat-slide-toggle-bar {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    &.mat-checked {
+      .mat-slide-toggle-bar {
+        background-color: var(--accent-color);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    display: none; // Hide on mobile to save space
+  }
+}
+
+button.mat-mdc-button {
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: auto;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+
+  @media (max-width: 768px) {
+    span {
+      display: none; // Hide text on mobile, keep only icons
+    }
+    
+    min-width: 40px;
+    padding: 0.5rem;
+  }
+}
+
+.logout-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Dark theme adjustments
+.dark-theme .navbar {
+  background-color: var(--primary-color);
+  
+  .theme-toggle {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
