@@ -1,14 +1,9 @@
 <div class="dashboard-container" [class.dark-theme]="false">
-  <!-- Top AppBar -->
-  <app-navbar class="no-print"></app-navbar>
-
   <!-- Filter Bar -->
   <app-filter-bar 
     class="no-print"
-    [isAdmin]="isAdminMode()"
     (filtersChanged)="onFiltersChanged($event)"
-    (printRequested)="onPrintRequested()"
-    (adminToggled)="toggleAdminDrawer()">
+    (printRequested)="onPrintRequested()">
   </app-filter-bar>
 
   <!-- Main Content Area -->
@@ -40,16 +35,20 @@
     </div>
   </div>
 
-  <!-- Admin Drawer -->
+  <!-- Admin Drawer Container -->
   <mat-sidenav-container class="admin-container no-print" *ngIf="isAdminMode()">
+    <mat-sidenav-content class="sidenav-backdrop"></mat-sidenav-content>
     <mat-sidenav 
       #drawer 
       mode="over" 
       position="end" 
       [opened]="isDrawerOpen()"
-      (closed)="isDrawerOpen.set(false)">
+      (closed)="onDrawerClosed()"
+      (backdropClick)="onDrawerClosed()"
+      class="admin-sidenav"
+      disableClose="false">
       <app-admin-drawer 
-        (drawerClosed)="isDrawerOpen.set(false)">
+        (drawerClosed)="onDrawerClosed()">
       </app-admin-drawer>
     </mat-sidenav>
   </mat-sidenav-container>

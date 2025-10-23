@@ -36,10 +36,8 @@ import { startOfDay, subDays, endOfDay } from 'date-fns';
   styleUrls: ['./filter-bar.component.scss']
 })
 export class FilterBarComponent implements OnInit {
-  @Input() isAdmin = false;
   @Output() filtersChanged = new EventEmitter<FilterOptions>();
   @Output() printRequested = new EventEmitter<void>();
-  @Output() adminToggled = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
   private seriesService = inject(SeriesService);
@@ -66,7 +64,7 @@ export class FilterBarComponent implements OnInit {
     this.seriesService.getAllSeries().subscribe({
       next: (series) => {
         this.availableSeries.set(series);
-        // Select all series by default
+        // Select all series by default - show all data initially
         this.filterForm.patchValue({
           selectedSeries: series.map(s => s.id)
         });
@@ -145,8 +143,24 @@ export class FilterBarComponent implements OnInit {
     this.printRequested.emit();
   }
 
-  onToggleAdmin(): void {
-    this.adminToggled.emit();
+  toggleSeries(seriesId: string): void {
+    const currentSelected = this.filterForm.get('selectedSeries')?.value || [];
+    let updated: string[];
+    
+    if (currentSelected.includes(seriesId)) {
+      // Remove if already selected
+      updated = currentSelected.filter((id: string) => id !== seriesId);
+    } else {
+      // Add if not selected
+      updated = [...currentSelected, seriesId];
+    }
+    
+    this.filterForm.patchValue({ selectedSeries: updated });
+  }
+
+  isSeriesSelected(seriesId: string): boolean {
+    const selectedSeries = this.filterForm.get('selectedSeries')?.value || [];
+    return selectedSeries.includes(seriesId);
   }
 
   removeSeriesChip(seriesId: string): void {

@@ -15,6 +15,7 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   Title,
   Tooltip,
   Legend,
@@ -27,6 +28,7 @@ Chart.register(
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   Title,
   Tooltip,
   Legend,
@@ -102,13 +104,9 @@ export class ChartComponent implements OnChanges {
       legend: {
         display: true,
         position: 'top',
-        onClick: (event, legendItem, legend) => {
-          // Toggle series visibility
-          const datasetIndex = legendItem.datasetIndex!;
-          const meta = legend.chart.getDatasetMeta(datasetIndex);
-          meta.hidden = !meta.hidden;
-          legend.chart.update();
-          this.updateYAxisRange();
+        onClick: () => {
+          // Disable legend clicking
+          return false;
         }
       },
       tooltip: {
@@ -139,25 +137,15 @@ export class ChartComponent implements OnChanges {
       intersect: false
     },
     onHover: (event, activeElements) => {
+      // Disable hover cursor change since clicking is disabled
       const canvas = event.native?.target as HTMLCanvasElement;
       if (canvas) {
-        canvas.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
+        canvas.style.cursor = 'default';
       }
     },
     onClick: (event, activeElements) => {
-      if (activeElements.length > 0) {
-        const element = activeElements[0];
-        const datasetIndex = element.datasetIndex;
-        const pointIndex = element.index;
-        
-        const datasets = this.chartData().datasets as ExtendedDataset[];
-        const dataset = datasets[datasetIndex];
-        const measurement = dataset.measurements?.[pointIndex];
-        
-        if (measurement) {
-          this.measurementSelected.emit(measurement);
-        }
-      }
+      // Disable chart point selection - only table should select measurements
+      return;
     }
   };
 
@@ -177,6 +165,13 @@ export class ChartComponent implements OnChanges {
 
   private async loadData(): Promise<void> {
     if (!this.filters) return;
+
+    // If no series are selected, show empty chart
+    if (!this.filters.seriesIds || this.filters.seriesIds.length === 0) {
+      this.chartData.set({ datasets: [] });
+      this.measurements.set([]);
+      return;
+    }
 
     this.isLoading.set(true);
     
@@ -227,8 +222,9 @@ export class ChartComponent implements OnChanges {
       }
 
       const dataset = datasetMap.get(measurement.seriesId)!;
+      const timestamp = new Date(measurement.timestamp).getTime();
       dataset.data.push({
-        x: new Date(measurement.timestamp).getTime(),
+        x: timestamp,
         y: measurement.value
       });
       dataset.measurements.push(measurement);
@@ -238,9 +234,15 @@ export class ChartComponent implements OnChanges {
     const datasets: ExtendedDataset[] = Array.from(datasetMap.entries()).map(([seriesId, dataset]) => {
       const seriesInfo = seriesMap.get(seriesId)!;
       
+      // Sort both data and measurements together to maintain alignment
+      const combined = dataset.data.map((point, index) => ({
+        point,
+        measurement: dataset.measurements[index]
+      })).sort((a, b) => a.point.x - b.point.x);
+      
       return {
         label: seriesInfo.name,
-        data: dataset.data.sort((a, b) => a.x - b.x),
+        data: combined.map(item => item.point),
         borderColor: seriesInfo.color,
         backgroundColor: seriesInfo.color + '20',
         fill: false,
@@ -248,7 +250,7 @@ export class ChartComponent implements OnChanges {
         pointRadius: 3,
         pointHoverRadius: 6,
         pointBackgroundColor: seriesInfo.color,
-        measurements: dataset.measurements
+        measurements: combined.map(item => item.measurement)
       };
     });
 

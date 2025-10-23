@@ -1,7 +1,7 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 64px); // Subtract navbar height
   background-color: var(--background-color);
 }
 
@@ -12,7 +12,12 @@
   padding: 1rem;
   overflow: hidden;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  @media (max-width: 900px) {
     flex-direction: column;
     gap: 0.5rem;
     padding: 0.5rem;
@@ -22,20 +27,34 @@
 .chart-section {
   flex: 0 0 65%;
   min-height: 0;
+  min-width: 300px; // Minimum width before shrinking
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
+    flex: 0 0 60%; // Less space on medium screens
+    min-width: 250px;
+  }
+
+  @media (max-width: 900px) {
     flex: 1;
     min-height: 300px;
+    min-width: 0;
   }
 }
 
 .table-section {
   flex: 0 0 35%;
   min-height: 0;
+  min-width: 200px; // Minimum width to stay visible
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
+    flex: 0 0 40%; // More space on medium screens
+    min-width: 180px;
+  }
+
+  @media (max-width: 900px) {
     flex: 1;
     min-height: 300px;
+    min-width: 0;
   }
 }
 
@@ -54,20 +73,46 @@
 
 .admin-container {
   position: fixed;
-  top: 0;
+  top: 64px; // Position under navbar
   right: 0;
   bottom: 0;
-  width: 400px;
-  z-index: 1000;
-  pointer-events: none;
+  width: 35%; // Match table section width (35% of viewport)
+  min-width: 400px; // Minimum width
+  max-width: 600px; // Maximum width
+  z-index: 999; // Lower than navbar but above content
+  pointer-events: all; // Allow clicks to pass through when closed
 
-  mat-sidenav {
-    width: 400px;
-    pointer-events: all;
+  &.mat-sidenav-container {
+    background: transparent; // No background
   }
 
-  mat-sidenav-content {
+  .sidenav-backdrop {
+    background: transparent !important; // Remove white backdrop
     pointer-events: none;
+  }
+
+  // When drawer is open, enable pointer events
+  &.mat-sidenav-opened {
+    pointer-events: all;
+  }
+}
+
+.admin-sidenav {
+  width: 100% !important; // Take full width of container
+  background-color: var(--surface-color, white) !important;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  
+  @media (max-width: 1200px) {
+    min-width: 350px;
+  }
+  
+  @media (max-width: 768px) {
+    width: 100vw !important;
+    position: fixed;
+    top: 64px;
+    right: 0;
+    bottom: 0;
   }
 }
 

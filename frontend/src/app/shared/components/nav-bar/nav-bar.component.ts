@@ -5,7 +5,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { ThemeService } from "../../../services/theme.service";
+import { AdminDrawerService } from "../../../services/admin-drawer.service";
 
 @Component({
   selector: 'app-navbar',
@@ -21,17 +21,12 @@ import { ThemeService } from "../../../services/theme.service";
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavbarComponent {
-  private themeService = inject(ThemeService);
   private router = inject(Router);
-
-  isDarkTheme$ = this.themeService.isDarkTheme$;
-
-  onThemeToggle(): void {
-    this.themeService.toggleTheme();
-  }
+  private adminDrawerService = inject(AdminDrawerService);
 
   onNavigateToAdmin(): void {
-    this.router.navigate(['/admin']);
+    // Toggle admin drawer using service
+    this.adminDrawerService.toggle();
   }
 
   onNavigateToLogin(): void {

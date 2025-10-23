@@ -12,6 +12,7 @@ import { DataTableComponent } from './components/data-table/data-table.component
 import { AdminDrawerComponent } from './components/admin-drawer/admin-drawer.component';
 import { NavbarComponent } from '../../shared/components/nav-bar/nav-bar.component';
 import { FilterOptions, Series, Measurement } from '../../shared/models/interfaces';
+import { AdminDrawerService } from '../../services/admin-drawer.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,9 +34,9 @@ import { FilterOptions, Series, Measurement } from '../../shared/models/interfac
 })
 export class DashboardComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private adminDrawerService = inject(AdminDrawerService);
   
   isAdminMode = signal(false);
-  isDrawerOpen = signal(false);
   selectedMeasurement = signal<Measurement | null>(null);
   currentFilters = signal<FilterOptions>({
     seriesIds: [],
@@ -44,9 +45,12 @@ export class DashboardComponent implements OnInit {
     quickRange: '7d'
   });
 
+  // Use service for drawer state
+  isDrawerOpen = this.adminDrawerService.isOpen;
+
   ngOnInit(): void {
-    // Check if this is admin route
-    this.isAdminMode.set(!!this.route.snapshot.data['isAdmin']);
+    // Set admin mode to true by default
+    this.isAdminMode.set(true);
   }
 
   onFiltersChanged(filters: FilterOptions): void {
@@ -62,7 +66,11 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleAdminDrawer(): void {
-    this.isDrawerOpen.update(open => !open);
+    this.adminDrawerService.toggle();
+  }
+
+  onDrawerClosed(): void {
+    this.adminDrawerService.close();
   }
 
   onPrintRequested(): void {

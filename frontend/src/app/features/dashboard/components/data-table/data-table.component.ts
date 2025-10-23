@@ -48,6 +48,10 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['filters'] && this.filters) {
       this.currentPage = 0;
+      // Reset paginator to first page when filters change
+      if (this.paginator) {
+        this.paginator.pageIndex = 0;
+      }
       this.loadData();
     }
     
@@ -57,18 +61,47 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // Don't assign paginator to dataSource as we're handling pagination manually
+    // this.dataSource.sort = this.sort; // Remove this as we handle sorting via API
     
     // Setup pagination events
-    this.paginator.page.subscribe(() => {
-      this.currentPage = this.paginator.pageIndex;
+    this.paginator.page.subscribe((event) => {
+      console.log('Paginator event:', event); // Debug log
+      this.currentPage = event.pageIndex;
+      this.pageSize = event.pageSize;
       this.loadData();
     });
+
+    // Setup sort events
+    if (this.sort) {
+      this.sort.sortChange.subscribe(() => {
+        console.log('Sort changed:', this.sort.active, this.sort.direction);
+        this.currentPage = 0; // Reset to first page when sorting
+        if (this.paginator) {
+          this.paginator.pageIndex = 0;
+        }
+        this.loadData();
+      });
+    }
+
+    // Initial load if filters are already set
+    if (this.filters) {
+      this.loadData();
+    }
   }
 
   private async loadData(): Promise<void> {
     if (!this.filters) return;
+
+    // If no series are selected, show empty table
+    if (!this.filters.seriesIds || this.filters.seriesIds.length === 0) {
+      this.dataSource.data = [];
+      this.totalElements.set(0);
+      if (this.paginator) {
+        this.paginator.length = 0;
+      }
+      return;
+    }
 
     this.isLoading.set(true);
     
@@ -77,14 +110,24 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
       const series = await this.seriesService.getAllSeries().toPromise() || [];
       this.availableSeries.set(series);
 
-      // Load measurements with pagination
-      const query = {
+      // Get current page size from paginator or use default
+      const currentPageSize = this.paginator?.pageSize || this.pageSize;
+      
+      // Load measurements with pagination and sorting
+      const query: any = {
         seriesIds: this.filters.seriesIds,
         from: this.filters.dateFrom?.toISOString(),
         to: this.filters.dateTo?.toISOString(),
         page: this.currentPage,
-        size: this.pageSize
+        size: currentPageSize
       };
+
+      // Add sorting if available
+      if (this.sort?.active && this.sort?.direction) {
+        query.sort = `${this.sort.active},${this.sort.direction}`;
+      }
+
+      console.log('Loading data with query:', query); // Debug log
 
       const response = await this.measurementService.queryMeasurements(query).toPromise();
       
@@ -98,10 +141,10 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
         this.dataSource.data = measurementsWithSeries;
         this.totalElements.set(response.totalElements);
         
-        // Update paginator
+        // Update paginator length but don't change pageIndex here to avoid infinite loop
         if (this.paginator) {
           this.paginator.length = response.totalElements;
-          this.paginator.pageIndex = this.currentPage;
+          // Don't set pageIndex here as it might trigger another page event
         }
       }
       
