@@ -1,0 +1,113 @@
+<mat-card class="measurement-table-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>assessment</mat-icon>
+      All Measurements
+    </mat-card-title>
+    <mat-card-subtitle>
+      Manage your measurement data
+    </mat-card-subtitle>
+    <div class="header-actions">
+      <button 
+        mat-icon-button 
+        (click)="onRefresh()"
+        [disabled]="isLoading"
+        matTooltip="Refresh data">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="loading-state" *ngIf="isLoading">
+      <mat-icon class="spinning">hourglass_empty</mat-icon>
+      <p>Loading measurements...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && measurements.length === 0">
+      <mat-icon>assessment</mat-icon>
+      <h3>No Measurements Found</h3>
+      <p>Create your first measurement to get started.</p>
+    </div>
+
+    <div class="table-container" *ngIf="!isLoading && measurements.length > 0">
+
+      <table mat-table [dataSource]="measurements" class="measurement-table">
+        <ng-container matColumnDef="series">
+          <th mat-header-cell *matHeaderCellDef>Series</th>
+          <td mat-cell *matCellDef="let measurement">
+            <div class="series-info">
+              <div 
+                class="color-indicator" 
+                [style.background-color]="getSeriesColor(measurement)">
+              </div>
+              <div class="series-name">
+                <strong>{{ getSeriesName(measurement) }}</strong>
+                <div class="series-id">ID: {{ measurement.series?.id || measurement.seriesId || 'N/A' }}</div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>Value</th>
+          <td mat-cell *matCellDef="let measurement">
+            <div class="value-cell">
+              <mat-icon class="value-icon">straighten</mat-icon>
+              <span>{{ formatValue(measurement.value) }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef>Date & Time</th>
+          <td mat-cell *matCellDef="let measurement">
+            <div class="date-cell">
+              <mat-icon class="date-icon">schedule</mat-icon>
+              <span>{{ formatTimestamp(measurement.timestamp) }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let measurement">
+            <div class="action-buttons">
+              <button 
+                mat-icon-button 
+                color="primary"
+                (click)="onEdit(measurement)"
+                matTooltip="Edit measurement">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button 
+                mat-icon-button 
+                color="warn"
+                (click)="onDelete(measurement)"
+                matTooltip="Delete measurement">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; trackBy: trackByMeasurement" class="measurement-row"></tr>
+      </table>
+    </div>
+
+    <div class="table-footer" *ngIf="!isLoading && measurements.length > 0">
+      <div class="table-info">
+        <span>{{ totalElements }} measurements total</span>
+      </div>
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="pageNumber"
+        [pageSizeOptions]="[5, 10, 25, 50, 100]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

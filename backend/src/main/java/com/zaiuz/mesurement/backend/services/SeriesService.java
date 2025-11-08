@@ -31,8 +31,6 @@ public class SeriesService {
         series.setMinValue(seriesDetails.getMinValue());
         series.setMaxValue(seriesDetails.getMaxValue());
         series.setColor(seriesDetails.getColor());
-        series.setCreatedBy(seriesDetails.getCreatedBy());
-        series.setCreatedAt(seriesDetails.getCreatedAt());
         series.setUpdatedAt(OffsetDateTime.now());
 
         return seriesRepository.save(series);

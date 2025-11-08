@@ -1,0 +1,115 @@
+<div class="admin-page">
+  <mat-toolbar class="admin-header">
+    <span>Admin Panel</span>
+  </mat-toolbar>
+
+  <div class="admin-content">
+    <mat-tab-group (selectedTabChange)="onTabChanged($event.index)">
+      <mat-tab label="Series">
+        <div class="tab-content">
+          <div class="tab-header" *ngIf="!showSeriesForm()">
+            <div class="tab-info">
+              <h2>Series Management</h2>
+              <p>Create, edit, and delete measurement series</p>
+            </div>
+            <button 
+              mat-raised-button 
+              color="primary"
+              (click)="onAddSeriesClick()">
+              <mat-icon>add</mat-icon>
+              Add New Series
+            </button>
+          </div>
+
+          <app-series-form
+            [isVisible]="showSeriesForm()"
+            [series]="editingSeries()"
+            (seriesCreated)="onSeriesCreated($event)"
+            (seriesUpdated)="onSeriesUpdated($event)"
+            (formClosed)="onSeriesFormClosed()">
+          </app-series-form>
+
+          <app-series-table
+            [series]="allSeries()"
+            [isLoading]="isLoadingSeries()"
+            (editSeries)="onEditSeries($event)"
+            (deleteSeries)="onDeleteSeries($event)"
+            (refreshData)="onRefreshSeries()">
+          </app-series-table>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Measurements">
+        <div class="tab-content">
+          <div class="tab-header" *ngIf="!showMeasurementForm()">
+            <div class="tab-info">
+              <h2>Measurement Management</h2>
+              <p>Create, edit, and delete individual measurements</p>
+            </div>
+            <button 
+              mat-raised-button 
+              color="primary"
+              (click)="onAddMeasurementClick()">
+              <mat-icon>add</mat-icon>
+              Add New Measurement
+            </button>
+          </div>
+
+          <app-measurement-form
+            [isVisible]="showMeasurementForm()"
+            [availableSeries]="allSeries()"
+            [measurement]="editingMeasurement()"
+            (measurementCreated)="onMeasurementCreated($event)"
+            (measurementUpdated)="onMeasurementUpdated($event)"
+            (formClosed)="onMeasurementFormClosed()">
+          </app-measurement-form>
+
+          <app-measurement-table
+            [measurements]="allMeasurements()"
+            [availableSeries]="allSeries()"
+            [isLoading]="isLoadingMeasurements()"
+            [totalElements]="measurementTotalCount()"
+            [pageSize]="measurementPageSize()"
+            [pageNumber]="measurementCurrentPage()"
+            (editMeasurement)="onEditMeasurement($event)"
+            (deleteMeasurement)="onDeleteMeasurement($event)"
+            (pageChanged)="onMeasurementPageChanged($event)"
+            (refreshData)="onRefreshMeasurements()">
+          </app-measurement-table>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Users">
+        <div class="tab-content">
+          <div class="tab-header" *ngIf="!showUserForm()">
+            <div class="tab-info">
+              <h2>User Management</h2>
+              <p>Create, edit, and delete system users</p>
+            </div>
+            <button 
+              mat-raised-button 
+              color="primary"
+              (click)="onAddUserClick()">
+              <mat-icon>person_add</mat-icon>
+              Add New User
+            </button>
+          </div>
+
+          <app-user-form
+            [isVisible]="showUserForm()"
+            [user]="editingUser()"
+            (userCreated)="onUserCreated($event)"
+            (userUpdated)="onUserUpdated($event)"
+            (formClosed)="onUserFormClosed()">
+          </app-user-form>
+
+          <app-user-table
+            #userTable
+            (editUser)="onEditUser($event)">
+          </app-user-table>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</div>

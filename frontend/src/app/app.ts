@@ -5,8 +5,7 @@ import { SharedModule } from './shared/shared.module';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, SharedModule],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  templateUrl: './app.html'
 })
 export class App {
   protected readonly title = signal('frontend');

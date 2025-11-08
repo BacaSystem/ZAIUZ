@@ -1,8 +1,9 @@
 .dashboard-container {
+  min-height: calc(100vh - var(--navbar-height));
+  background-color: var(--background-color);
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 64px); // Subtract navbar height
-  background-color: var(--background-color);
+  height: calc(100vh - var(--navbar-height));
 }
 
 .main-content {
@@ -27,10 +28,10 @@
 .chart-section {
   flex: 0 0 65%;
   min-height: 0;
-  min-width: 300px; // Minimum width before shrinking
+  min-width: 300px;
 
   @media (max-width: 1200px) {
-    flex: 0 0 60%; // Less space on medium screens
+    flex: 0 0 60%;
     min-width: 250px;
   }
 
@@ -44,10 +45,10 @@
 .table-section {
   flex: 0 0 35%;
   min-height: 0;
-  min-width: 200px; // Minimum width to stay visible
+  min-width: 200px;
 
   @media (max-width: 1200px) {
-    flex: 0 0 40%; // More space on medium screens
+    flex: 0 0 40%;
     min-width: 180px;
   }
 
@@ -71,78 +72,97 @@
   }
 }
 
-.admin-container {
-  position: fixed;
-  top: 64px; // Position under navbar
-  right: 0;
-  bottom: 0;
-  width: 35%; // Match table section width (35% of viewport)
-  min-width: 400px; // Minimum width
-  max-width: 600px; // Maximum width
-  z-index: 999; // Lower than navbar but above content
-  pointer-events: all; // Allow clicks to pass through when closed
-
-  &.mat-sidenav-container {
-    background: transparent; // No background
-  }
-
-  .sidenav-backdrop {
-    background: transparent !important; // Remove white backdrop
-    pointer-events: none;
-  }
-
-  // When drawer is open, enable pointer events
-  &.mat-sidenav-opened {
-    pointer-events: all;
-  }
-}
-
-.admin-sidenav {
-  width: 100% !important; // Take full width of container
-  background-color: var(--surface-color, white) !important;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
-  
-  @media (max-width: 1200px) {
-    min-width: 350px;
-  }
-  
-  @media (max-width: 768px) {
-    width: 100vw !important;
-    position: fixed;
-    top: 64px;
-    right: 0;
-    bottom: 0;
-  }
-}
-
-// Print styles
 @media print {
   .dashboard-container {
-    height: auto;
+    height: auto !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .main-content {
-    flex-direction: column;
+    flex-direction: column !important;
     gap: 1rem;
-    padding: 1rem;
+    padding: 0.5rem !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .chart-section {
-    flex: none;
+    flex: none !important;
     width: 100% !important;
+    max-width: 100% !important;
+    height: 400px !important;
     page-break-inside: avoid;
+    overflow: hidden !important;
+    
+    .chart-card {
+      height: 400px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      
+      mat-card-content {
+        height: 400px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0.5rem !important;
+        overflow: hidden !important;
+        
+        app-chart {
+          width: 100% !important;
+          max-width: 100% !important;
+          height: 100% !important;
+          display: block !important;
+          
+          canvas {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: auto !important;
+          }
+          
+          .chart-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+          }
+        }
+      }
+    }
   }
 
   .table-section {
-    flex: none;
+    flex: none !important;
     width: 100% !important;
+    max-width: 100% !important;
     margin-top: 1rem;
+    height: auto !important;
+    
+    .table-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      
+      mat-card-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        padding: 0.5rem !important;
+        
+        app-data-table {
+          width: 100% !important;
+          max-width: 100% !important;
+          overflow: hidden !important;
+        }
+      }
+    }
   }
 
   .chart-card,
   .table-card {
     box-shadow: none !important;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
   }
 }

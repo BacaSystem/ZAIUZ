@@ -1,0 +1,109 @@
+<mat-card class="series-table-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>view_list</mat-icon>
+      All Series
+    </mat-card-title>
+    <mat-card-subtitle>
+      Manage your measurement series
+    </mat-card-subtitle>
+    <div class="header-actions">
+      <button 
+        mat-icon-button 
+        (click)="onRefresh()"
+        [disabled]="isLoading"
+        matTooltip="Refresh data">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="loading-state" *ngIf="isLoading">
+      <mat-icon class="spinning">hourglass_empty</mat-icon>
+      <p>Loading series data...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && series.length === 0">
+      <mat-icon>data_object</mat-icon>
+      <h3>No Series Found</h3>
+      <p>Create your first measurement series to get started.</p>
+    </div>
+
+    <div class="table-container" *ngIf="!isLoading && series.length > 0">
+        <table mat-table [dataSource]="series" class="series-table">
+        <ng-container matColumnDef="color">
+          <th mat-header-cell *matHeaderCellDef>Color</th>
+          <td mat-cell *matCellDef="let series">
+            <div 
+              class="color-indicator" 
+              [style.background-color]="series.color"
+              [matTooltip]="series.color">
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let series">
+            <div class="series-name">
+              <strong>{{ series.name }}</strong>
+              <div class="series-id">ID: {{ series.id }}</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="minValue">
+          <th mat-header-cell *matHeaderCellDef>Min Value</th>
+          <td mat-cell *matCellDef="let series">
+            <div class="value-cell">
+              <mat-icon class="value-icon">trending_down</mat-icon>
+              <span>{{ series.minValue | number:'1.2-2' }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="maxValue">
+          <th mat-header-cell *matHeaderCellDef>Max Value</th>
+          <td mat-cell *matCellDef="let series">
+            <div class="value-cell">
+              <mat-icon class="value-icon">trending_up</mat-icon>
+              <span>{{ series.maxValue | number:'1.2-2' }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let series">
+            <div class="action-buttons">
+              <button 
+                mat-icon-button 
+                color="primary"
+                (click)="onEditSeries(series)"
+                [disabled]="isDeleting()"
+                matTooltip="Edit series">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button 
+                mat-icon-button 
+                color="warn"
+                (click)="onDeleteSeries(series)"
+                [disabled]="isDeleting()"
+                matTooltip="Delete series">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; trackBy: trackBySeries" class="series-row"></tr>
+      </table>
+    </div>
+
+    <div class="table-info" *ngIf="!isLoading && series.length > 0">
+      <span>{{ series.length }} series total</span>
+    </div>
+  </mat-card-content>
+</mat-card>

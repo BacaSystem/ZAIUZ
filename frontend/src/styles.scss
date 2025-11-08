@@ -1,23 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
-
+@use './themes.scss';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import './themes.scss';
-
-html, body { 
-  height: 100%; 
-  margin: 0; 
-  font-family: 'Inter', 'Roboto', "Helvetica Neue", sans-serif;
-}
 
 * {
   box-sizing: border-box;
 }
 
-// Material Icons fix
-.material-icons {
-  font-family: 'Material Icons';
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: 'Inter', 'Roboto', "Helvetica Neue", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.material-icons,
+mat-icon {
+  font-family: 'Material Icons' !important;
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -34,56 +35,10 @@ html, body {
   font-feature-settings: 'liga';
 }
 
-// Mat-icon styling
-mat-icon {
-  font-family: 'Material Icons' !important;
-  font-weight: normal;
-  font-style: normal;
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
-}
-
-// Global styles
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-// Datepicker overlay fix
 .cdk-overlay-container {
   z-index: 1001 !important;
 }
 
 .mat-datepicker-content {
   z-index: 1002 !important;
-}
-
-// Print styles
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  .print-full-width {
-    width: 100% !important;
-  }
-  
-  body {
-    background: white !important;
-    color: black !important;
-  }
-  
-  .mat-sidenav-container {
-    background: white !important;
-  }
 }

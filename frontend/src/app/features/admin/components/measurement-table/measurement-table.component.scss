@@ -1,0 +1,345 @@
+.measurement-table-card {
+  margin-bottom: 2rem;
+
+  mat-card-header {
+    background-color: var(--surface-color, #fafafa);
+    padding: 1.5rem;
+    margin: -1rem -1rem 0 -1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .mat-mdc-card-title-group {
+      flex: 1;
+    }
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 0.5rem 0;
+      font-size: 1.25rem;
+      color: var(--text-primary-color, #333);
+
+      mat-icon {
+        font-size: 24px;
+        height: 24px;
+        width: 24px;
+        color: var(--primary-color, #2196F3);
+      }
+    }
+
+    mat-card-subtitle {
+      margin: 0;
+      color: var(--text-secondary-color, #666);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+
+      button {
+        mat-icon {
+          color: var(--text-secondary-color, #666);
+        }
+
+        &:hover mat-icon {
+          color: var(--primary-color, #2196F3);
+        }
+      }
+    }
+  }
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-secondary-color, #666);
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 1rem;
+    color: var(--primary-color, #2196F3);
+
+    &.spinning {
+      animation: spin 2s linear infinite;
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: var(--text-secondary-color, #666);
+
+  mat-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    margin-bottom: 1rem;
+    color: var(--text-secondary-color, #ccc);
+  }
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: var(--text-primary-color, #333);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  
+  @media (max-width: 1200px) {
+    margin: 0 -0.5rem;
+  }
+}
+
+.measurement-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  .mat-column-series { width: auto; min-width: 200px; }
+  .mat-column-value { width: 120px; }
+  .mat-column-timestamp { width: 180px; }
+  .mat-column-actions { width: 100px; }
+
+  .mat-mdc-header-cell {
+    background-color: var(--surface-color, #fafafa);
+    font-weight: 600;
+    color: var(--text-primary-color, #333);
+    padding: 0.75rem 0.5rem;
+    border-bottom: 2px solid var(--primary-color, #2196F3);
+    font-size: 0.875rem;
+    text-align: left;
+  }
+
+  .mat-mdc-cell {
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    font-size: 0.875rem;
+    vertical-align: middle;
+  }
+
+  .measurement-row {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+}
+
+.color-indicator {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.series-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.series-name {
+  overflow: hidden;
+  
+  strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-primary-color, #333);
+    margin-bottom: 0.125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .series-id {
+    font-size: 0.7rem;
+    color: var(--text-secondary-color, #666);
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.value-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  .value-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    color: var(--text-secondary-color, #666);
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 0.875rem;
+    color: var(--text-primary-color, #333);
+    font-weight: 500;
+    font-family: 'Space Mono', 'Courier New', monospace;
+  }
+}
+
+.date-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  .date-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    color: var(--text-secondary-color, #666);
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 0.875rem;
+    color: var(--text-primary-color, #333);
+    font-weight: 500;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.125rem;
+
+  button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    
+    mat-icon {
+      font-size: 16px;
+      height: 16px;
+      width: 16px;
+      margin: 0;
+    }
+
+    &[disabled] {
+      opacity: 0.5;
+    }
+  }
+}
+
+.table-footer {
+  display: flex;
+  flex-direction: column;
+  
+  .table-info {
+    padding: 1rem 1.5rem;
+    background-color: var(--surface-color, #fafafa);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary-color, #666);
+  }
+
+  mat-paginator {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: var(--surface-color, #fafafa);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .measurement-table-card {
+    mat-card-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+
+      .header-actions {
+        align-self: flex-end;
+      }
+    }
+  }
+
+  .measurement-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+
+  .series-name {
+    .series-id {
+      font-size: 0.7rem;
+    }
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.125rem;
+
+    button {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .table-container {
+    margin: 0 -1rem;
+  }
+
+  .measurement-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      padding: 0.5rem 0.25rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  .color-indicator {
+    width: 24px;
+    height: 24px;
+  }
+}

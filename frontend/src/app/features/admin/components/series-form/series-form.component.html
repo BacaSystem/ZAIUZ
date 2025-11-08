@@ -1,0 +1,99 @@
+<mat-card *ngIf="isVisible" class="series-form-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>{{ isEditing ? 'edit' : 'add' }}</mat-icon>
+      {{ formTitle }}
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="seriesForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Series Name</mat-label>
+        <input 
+          matInput 
+          formControlName="name" 
+          placeholder="Enter series name"
+          maxlength="50">
+        <mat-icon matSuffix>label</mat-icon>
+        <mat-error>{{ getFieldError('name') }}</mat-error>
+      </mat-form-field>
+
+      <div class="value-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Minimum Value</mat-label>
+          <input 
+            matInput 
+            formControlName="minValue" 
+            type="number"
+            step="0.01"
+            placeholder="0">
+          <mat-icon matSuffix>trending_down</mat-icon>
+          <mat-error>{{ getFieldError('minValue') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Maximum Value</mat-label>
+          <input 
+            matInput 
+            formControlName="maxValue" 
+            type="number"
+            step="0.01"
+            placeholder="100">
+          <mat-icon matSuffix>trending_up</mat-icon>
+          <mat-error>{{ getFieldError('maxValue') }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Series Color</mat-label>
+        <mat-select formControlName="color">
+          <mat-option *ngFor="let color of colorOptions" [value]="color.value">
+            <div class="color-option">
+              <div 
+                class="color-preview" 
+                [style.background-color]="color.value">
+              </div>
+              <span>{{ color.name }}</span>
+            </div>
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>palette</mat-icon>
+        <mat-error>{{ getFieldError('color') }}</mat-error>
+      </mat-form-field>
+
+      <div class="color-preview-section" *ngIf="seriesForm.get('color')?.value">
+        <label>Preview:</label>
+        <div 
+          class="selected-color-preview" 
+          [style.background-color]="seriesForm.get('color')?.value">
+        </div>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage()">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button 
+      mat-button 
+      type="button" 
+      (click)="onCancel()"
+      [disabled]="isLoading()">
+      Cancel
+    </button>
+    <button 
+      mat-raised-button 
+      color="primary"
+      type="button"
+      (click)="onSubmit()"
+      [disabled]="!seriesForm.valid || isLoading()">
+      <mat-icon *ngIf="isLoading()">hourglass_empty</mat-icon>
+      <mat-icon *ngIf="!isLoading()">{{ isEditing ? 'save' : 'add' }}</mat-icon>
+      {{ isEditing ? 'Update' : 'Create' }} Series
+    </button>
+  </mat-card-actions>
+</mat-card>

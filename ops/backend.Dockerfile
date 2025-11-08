@@ -18,6 +18,10 @@ RUN gradle bootJar -x test --no-daemon
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 COPY --from=build /app/build/libs/backend-*.jar /app/app.jar
 ENV JAVA_OPTS=""
 EXPOSE 8080

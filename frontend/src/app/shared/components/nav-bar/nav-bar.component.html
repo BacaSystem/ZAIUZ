@@ -1,30 +1,63 @@
 <mat-toolbar class="navbar">
   <div class="navbar-content">
-    <!-- Left side - Logo/Brand -->
     <div class="navbar-brand">
-      <a routerLink="/" class="brand-link">
+      <a routerLink="/dashboard" class="brand-link">
         <mat-icon class="brand-icon">assessment</mat-icon>
         <span class="brand-text">Measurements Dashboard</span>
       </a>
     </div>
 
-    <!-- Right side - Actions -->
     <div class="navbar-actions">
-      <!-- Navigation Buttons -->
-      <button mat-button (click)="onNavigateToAdmin()">
-        <mat-icon>admin_panel_settings</mat-icon>
-        Admin
-      </button>
+      
+      <ng-container *ngIf="authService.isAuthenticated()">
+        <div class="user-menu" *ngIf="authService.currentUser() as user">
+          <button mat-button 
+                  [matMenuTriggerFor]="userMenu" 
+                  class="user-info-button">
+            <mat-icon>account_circle</mat-icon>
+            <div class="user-details">
+              <span class="user-text">{{ user.username }}</span>
+              <span class="user-role" [class.admin]="user.role === 'Admin'">
+                {{ user.role === 'Admin' ? 'ADMINISTRATOR' : 'USER' }}
+              </span>
+            </div>
+          </button>
 
-      <button mat-button (click)="onNavigateToLogin()">
-        <mat-icon>login</mat-icon>
-        Sign In
-      </button>
+          <mat-menu #userMenu="matMenu" class="user-dropdown-menu">
+            <button mat-menu-item (click)="onChangePassword()">
+              <mat-icon>lock</mat-icon>
+              <span>Change Password</span>
+            </button>
+            <button mat-menu-item (click)="onLogout()" class="menu-item-danger">
+              <mat-icon>logout</mat-icon>
+              <span>Sign Out</span>
+            </button>
+          </mat-menu>
+        </div>
 
-      <button mat-button (click)="onLogout()" class="logout-button">
-        <mat-icon>logout</mat-icon>
-        Logout
-      </button>
+        <button mat-button 
+                (click)="onNavigateToAdmin()"
+                *ngIf="authService.isAdmin()"
+                class="admin-button">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Admin
+        </button>
+
+        <button mat-icon-button 
+                (click)="onLogout()" 
+                class="logout-button"
+                matTooltip="Sign out">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="!authService.isAuthenticated()">
+        <button mat-button (click)="onNavigateToLogin()" class="signin-button">
+          <mat-icon>login</mat-icon>
+          Sign In
+        </button>
+      </ng-container>
+
     </div>
   </div>
 </mat-toolbar>

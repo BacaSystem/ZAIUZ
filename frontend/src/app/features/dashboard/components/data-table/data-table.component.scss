@@ -156,7 +156,6 @@ mat-paginator {
   background-color: var(--surface-color);
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .table-header {
     padding: 0.75rem;
@@ -178,7 +177,6 @@ mat-paginator {
   }
 }
 
-// Print styles
 @media print {
   .table-container {
     height: auto;
@@ -188,6 +186,16 @@ mat-paginator {
   .table-header {
     border-bottom: 2px solid #000;
     background: white !important;
+    padding: 0.5rem 1rem !important;
+    
+    h3 {
+      font-size: 1.1rem !important;
+      color: black !important;
+    }
+    
+    .header-actions {
+      display: none !important;
+    }
   }
 
   .table-wrapper {
@@ -196,10 +204,19 @@ mat-paginator {
   }
 
   .measurements-table {
+    font-size: 0.8rem !important;
+    
     .mat-mdc-header-cell {
       background: white !important;
       color: black !important;
       border-bottom: 2px solid #000;
+      padding: 6px 12px !important;
+      font-weight: bold !important;
+    }
+
+    .mat-mdc-cell {
+      padding: 4px 12px !important;
+      border-bottom: 1px solid #ddd;
     }
 
     .mat-mdc-row {
@@ -214,11 +231,33 @@ mat-paginator {
     }
   }
 
+  .series-cell {
+    gap: 0.5rem !important;
+    
+    .series-color-indicator {
+      width: 8px !important;
+      height: 8px !important;
+    }
+    
+    .series-name {
+      font-size: 0.8rem !important;
+    }
+  }
+  
+  .value-cell {
+    font-size: 0.8rem !important;
+    font-weight: 600;
+  }
+  
+  .timestamp-cell {
+    font-size: 0.75rem !important;
+  }
+
   mat-paginator {
-    display: none;
+    display: none !important;
   }
 
   .table-loading {
-    display: none;
+    display: none !important;
   }
 }

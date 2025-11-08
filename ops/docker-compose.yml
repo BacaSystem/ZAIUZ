@@ -14,6 +14,11 @@ services:
     volumes:
       - zauiz-measurements-db:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   backend:
     build:
@@ -21,28 +26,48 @@ services:
       dockerfile: ops/backend.Dockerfile
     container_name: measurements-backend
     restart: unless-stopped
+    env_file: .env
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: false
+      SPRING_JPA_FORMAT_SQL: false
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME}
+      FRONTEND_ORIGIN: http://localhost:3000
     ports:
-      - "8080:8080"
+      - "${BACKEND_PORT:-8080}:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+# Temporarily disabled until actuator security is fixed
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
-  # frontend:
-  #   build:
-  #     context: ..
-  #     dockerfile: ops/frontend.Dockerfile
-  #   container_name: measurements-frontend
-  #   restart: unless-stopped
-  #   ports:
-  #     - "3000:80"
-  #   depends_on:
-  #     - backend
-  #   environment:
-  #     - NODE_ENV=production
+  frontend:
+    build:
+      context: ..
+      dockerfile: ops/frontend.Dockerfile
+    container_name: measurements-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+      interval: 30s  
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 volumes:
   zauiz-measurements-db:

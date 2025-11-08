@@ -1,18 +1,90 @@
 <div class="login-container">
   <mat-card class="login-card">
     <mat-card-header>
-      <mat-card-title>Sign In</mat-card-title>
-      <mat-card-subtitle>Authentication will be implemented later</mat-card-subtitle>
+      <div class="header-content">
+        <mat-icon class="app-icon">assessment</mat-icon>
+        <div class="header-text">
+          <mat-card-title>{{ isRegisterMode ? 'Create Account' : 'Sign In' }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ isRegisterMode ? 'Join the Measurements System' : 'Welcome back to the Measurements System' }}
+          </mat-card-subtitle>
+        </div>
+      </div>
     </mat-card-header>
+
     <mat-card-content>
-      <p>JWT-based authentication will be implemented in a future iteration.</p>
-      <p>For now, you can access the admin features directly from the main dashboard.</p>
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput 
+                 formControlName="username" 
+                 placeholder="Enter your username"
+                 autocomplete="username">
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error *ngIf="authForm.get('username')?.hasError('required')">
+            Username is required
+          </mat-error>
+          <mat-error *ngIf="authForm.get('username')?.hasError('minlength')">
+            Username must be at least 3 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput 
+                 [type]="hidePassword ? 'password' : 'text'"
+                 formControlName="password" 
+                 placeholder="Enter your password"
+                 autocomplete="current-password">
+          <button mat-icon-button 
+                  matSuffix 
+                  type="button"
+                  (click)="hidePassword = !hidePassword"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="authForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+          <mat-error *ngIf="authForm.get('password')?.hasError('minlength')">
+            Password must be at least 6 characters
+          </mat-error>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="errorMessage()">
+          <mat-icon>error</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+
+        <button mat-raised-button 
+                color="primary" 
+                type="submit"
+                class="submit-button full-width"
+                [disabled]="authForm.invalid || isLoading()">
+          <mat-spinner diameter="20" *ngIf="isLoading()"></mat-spinner>
+          <mat-icon *ngIf="!isLoading()">
+            {{ isRegisterMode ? 'person_add' : 'login' }}
+          </mat-icon>
+          <span>{{ isRegisterMode ? 'Create Account' : 'Sign In' }}</span>
+        </button>
+
+      </form>
+
+      <mat-divider></mat-divider>
+
+      <div class="mode-toggle">
+        <p>
+          {{ isRegisterMode ? 'Already have an account?' : "Don't have an account?" }}
+          <button mat-button 
+                  color="primary" 
+                  (click)="toggleMode()"
+                  [disabled]="isLoading()">
+            {{ isRegisterMode ? 'Sign In' : 'Create Account' }}
+          </button>
+        </p>
+      </div>
+
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="onBack()">
-        <mat-icon>arrow_back</mat-icon>
-        Back to Dashboard
-      </button>
-    </mat-card-actions>
   </mat-card>
 </div>

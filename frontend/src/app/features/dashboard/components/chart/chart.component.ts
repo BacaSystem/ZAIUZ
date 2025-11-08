@@ -8,8 +8,6 @@ import { FilterOptions, Measurement, Series } from '../../../../shared/models/in
 import { MeasurementService } from '../../../../services/measurement.service';
 import { SeriesService } from '../../../../services/series.service';
 import { format } from 'date-fns';
-
-// Register Chart.js components
 import {
   CategoryScale,
   LinearScale,
@@ -105,7 +103,6 @@ export class ChartComponent implements OnChanges {
         display: true,
         position: 'top',
         onClick: () => {
-          // Disable legend clicking
           return false;
         }
       },
@@ -137,14 +134,12 @@ export class ChartComponent implements OnChanges {
       intersect: false
     },
     onHover: (event, activeElements) => {
-      // Disable hover cursor change since clicking is disabled
       const canvas = event.native?.target as HTMLCanvasElement;
       if (canvas) {
         canvas.style.cursor = 'default';
       }
     },
     onClick: (event, activeElements) => {
-      // Disable chart point selection - only table should select measurements
       return;
     }
   };
@@ -157,7 +152,7 @@ export class ChartComponent implements OnChanges {
     if (changes['filters'] && this.filters) {
       this.loadData();
     }
-    
+
     if (changes['selectedMeasurement']) {
       this.highlightSelectedPoint();
     }
@@ -166,7 +161,6 @@ export class ChartComponent implements OnChanges {
   private async loadData(): Promise<void> {
     if (!this.filters) return;
 
-    // If no series are selected, show empty chart
     if (!this.filters.seriesIds || this.filters.seriesIds.length === 0) {
       this.chartData.set({ datasets: [] });
       this.measurements.set([]);
@@ -174,27 +168,24 @@ export class ChartComponent implements OnChanges {
     }
 
     this.isLoading.set(true);
-    
+
     try {
-      // Load series data
       const series = await this.seriesService.getAllSeries().toPromise() || [];
       this.availableSeries.set(series);
 
-      // Load measurements
       const query = {
         seriesIds: this.filters.seriesIds,
         from: this.filters.dateFrom?.toISOString(),
         to: this.filters.dateTo?.toISOString(),
-        size: 10000 // Load more data for chart
+        size: 10000
       };
 
       const response = await this.measurementService.queryMeasurements(query).toPromise();
       const measurements = response?.content || [];
       this.measurements.set(measurements);
 
-      // Transform data for chart
       this.updateChartData(measurements, series);
-      
+
     } catch (error) {
       console.error('Error loading chart data:', error);
     } finally {
@@ -209,19 +200,19 @@ export class ChartComponent implements OnChanges {
       measurements: Measurement[];
     }>();
 
-    // Group measurements by series
     measurements.forEach(measurement => {
-      const seriesInfo = seriesMap.get(measurement.seriesId);
-      if (!seriesInfo) return;
+      const seriesId = measurement.seriesId || measurement.series?.id;
+      const seriesInfo = seriesMap.get(seriesId || '');
+      if (!seriesInfo || !seriesId) return;
 
-      if (!datasetMap.has(measurement.seriesId)) {
-        datasetMap.set(measurement.seriesId, {
+      if (!datasetMap.has(seriesId)) {
+        datasetMap.set(seriesId, {
           data: [],
           measurements: []
         });
       }
 
-      const dataset = datasetMap.get(measurement.seriesId)!;
+      const dataset = datasetMap.get(seriesId)!
       const timestamp = new Date(measurement.timestamp).getTime();
       dataset.data.push({
         x: timestamp,
@@ -230,16 +221,14 @@ export class ChartComponent implements OnChanges {
       dataset.measurements.push(measurement);
     });
 
-    // Create chart datasets
     const datasets: ExtendedDataset[] = Array.from(datasetMap.entries()).map(([seriesId, dataset]) => {
       const seriesInfo = seriesMap.get(seriesId)!;
-      
-      // Sort both data and measurements together to maintain alignment
+
       const combined = dataset.data.map((point, index) => ({
         point,
         measurement: dataset.measurements[index]
       })).sort((a, b) => a.point.x - b.point.x);
-      
+
       return {
         label: seriesInfo.name,
         data: combined.map(item => item.point),
@@ -255,8 +244,7 @@ export class ChartComponent implements OnChanges {
     });
 
     this.chartData.set({ datasets: datasets as any });
-    
-    // Update Y-axis range after data load
+
     setTimeout(() => this.updateYAxisRange(), 100);
   }
 
@@ -297,26 +285,24 @@ export class ChartComponent implements OnChanges {
     if (!this.chart?.chart || !this.selectedMeasurement) return;
 
     const datasets = this.chartData().datasets as ExtendedDataset[];
-    
-    // Reset all point styles
+
     datasets.forEach(dataset => {
       dataset.pointRadius = 3;
       dataset.pointBackgroundColor = dataset.borderColor;
     });
 
-    // Highlight selected point
     const selectedMeasurement = this.selectedMeasurement;
     datasets.forEach(dataset => {
       const measurements = dataset.measurements || [];
       const index = measurements.findIndex((m: Measurement) => m.id === selectedMeasurement.id);
-      
+
       if (index !== -1) {
         const pointRadius = Array(dataset.data.length).fill(3);
         const pointBackgroundColor = Array(dataset.data.length).fill(dataset.borderColor);
-        
+
         pointRadius[index] = 8;
-        pointBackgroundColor[index] = '#FFD700'; // Gold color for highlight
-        
+        pointBackgroundColor[index] = '#FFD700';
+
         dataset.pointRadius = pointRadius;
         dataset.pointBackgroundColor = pointBackgroundColor;
       }

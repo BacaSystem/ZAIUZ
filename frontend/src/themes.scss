@@ -1,22 +1,167 @@
-// Custom theme variables
 :root {
   --primary-color: #4D96FF;
-  --accent-color: #FF6B6B;
-  --success-color: #2ec4b6;
+  --warning-color: #FFA726;
+  --error-color: #f44336;
   --surface-color: #ffffff;
   --background-color: #fafafa;
   --text-color: rgba(0, 0, 0, 0.87);
   --text-secondary-color: rgba(0, 0, 0, 0.54);
-}
-
-.dark-theme {
-  --surface-color: #424242;
-  --background-color: #303030;
-  --text-color: rgba(255, 255, 255, 0.87);
-  --text-secondary-color: rgba(255, 255, 255, 0.54);
-}
-
-// Chart color palette for series
-:root {
+  --border-color: rgba(0, 0, 0, 0.12);
+  --hover-background: rgba(0, 0, 0, 0.04);
   --chart-colors: #4D96FF, #FF6B6B, #2ec4b6, #FFA726, #9C27B0, #4CAF50, #FF9800, #E91E63;
+  --navbar-height: 64px;
+  --border-radius: 8px;
+  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+  min-height: calc(100vh - var(--navbar-height));
+  background-color: var(--background-color);
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 1.5rem;
+  margin: -1rem -1rem 1.5rem -1rem;
+  
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 1.25rem;
+    
+    mat-icon {
+      font-size: 24px;
+      height: 24px;
+      width: 24px;
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  border-radius: var(--border-radius);
+  color: var(--error-color);
+  font-size: 0.875rem;
+  
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  
+  .icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--text-secondary-color);
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+  
+  p {
+    margin: 0;
+    color: var(--text-secondary-color);
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+  
+  .card-header {
+    padding: 0.75rem 1rem;
+    margin: -0.75rem -0.75rem 1rem -0.75rem;
+    
+    .title {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  .chart-container,
+  .chartjs-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+  }
 }

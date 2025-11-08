@@ -1,0 +1,87 @@
+<mat-card *ngIf="isVisible" class="measurement-form-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+      {{ formTitle }}
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="measurementForm" (ngSubmit)="onSubmit()">
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Measurement Series</mat-label>
+        <mat-select formControlName="seriesId" required>
+          <mat-option *ngFor="let series of availableSeries" [value]="series.id">
+            <div class="series-option">
+              <div class="series-color" [style.background-color]="series.color"></div>
+              <span class="series-name">{{ series.name }}</span>
+              <span class="series-range">({{ series.minValue }} - {{ series.maxValue }})</span>
+            </div>
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>timeline</mat-icon>
+        <mat-error *ngIf="measurementForm.get('seriesId')?.hasError('required')">
+          Please select a measurement series
+        </mat-error>
+      </mat-form-field>
+
+      <div class="value-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Measurement Value</mat-label>
+          <input 
+            matInput 
+            type="number" 
+            step="0.01"
+            formControlName="value" 
+            required
+            placeholder="Enter value">
+          <mat-icon matSuffix>straighten</mat-icon>
+          <mat-error>{{ getValueErrorMessage() }}</mat-error>
+          <mat-hint *ngIf="selectedSeries()">
+            Valid range: {{ selectedSeries()!.minValue }} - {{ selectedSeries()!.maxValue }}
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Date and Time</mat-label>
+          <input 
+            matInput 
+            [matDatepicker]="picker" 
+            formControlName="timestamp"
+            required
+            placeholder="Select date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="measurementForm.get('timestamp')?.hasError('required')">
+            Please select a date and time
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage()">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button 
+      mat-button 
+      (click)="onCancel()" 
+      [disabled]="isSubmitting()">
+      Cancel
+    </button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="onSubmit()"
+      [disabled]="!measurementForm.valid || isSubmitting()">
+      <mat-icon *ngIf="isSubmitting()">hourglass_empty</mat-icon>
+      <mat-icon *ngIf="!isSubmitting()">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+      {{ isEditMode ? 'Update' : 'Create' }} Measurement
+    </button>
+  </mat-card-actions>
+</mat-card>

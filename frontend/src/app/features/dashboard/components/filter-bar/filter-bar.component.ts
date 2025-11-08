@@ -64,7 +64,6 @@ export class FilterBarComponent implements OnInit {
     this.seriesService.getAllSeries().subscribe({
       next: (series) => {
         this.availableSeries.set(series);
-        // Select all series by default - show all data initially
         this.filterForm.patchValue({
           selectedSeries: series.map(s => s.id)
         });
@@ -117,7 +116,6 @@ export class FilterBarComponent implements OnInit {
   }
 
   onDateChanged(): void {
-    // When dates are manually changed, switch to custom range
     this.filterForm.patchValue({
       quickRange: 'custom'
     }, { emitEvent: false });
@@ -148,10 +146,8 @@ export class FilterBarComponent implements OnInit {
     let updated: string[];
     
     if (currentSelected.includes(seriesId)) {
-      // Remove if already selected
       updated = currentSelected.filter((id: string) => id !== seriesId);
     } else {
-      // Add if not selected
       updated = [...currentSelected, seriesId];
     }
     

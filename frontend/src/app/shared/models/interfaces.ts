@@ -1,33 +1,37 @@
-// Common interfaces for the application
 export interface Series {
   id: string;
   name: string;
   minValue: number;
   maxValue: number;
   color: string;
-  createdBy?: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface Measurement {
   id: string;
   seriesId: string;
+  series: Series;
   value: number;
   timestamp: string;
-  createdBy?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  series?: Series;
 }
 
 export interface User {
   id: string;
   username: string;
+  password: string;
   role: string;
-  createdBy?: string;
-  createdAt?: string;
-  updatedAt?: string;
+}
+
+export interface CreateUpdateMeasurementDto {
+  seriesId: string;
+  value: number;
+  timestamp: string;
+}
+
+export interface CreateUpdateSeriesDto {
+  name: string;
+  color: string;
+  minValue: number;
+  maxValue: number;
 }
 
 export interface PaginatedResponse<T> {

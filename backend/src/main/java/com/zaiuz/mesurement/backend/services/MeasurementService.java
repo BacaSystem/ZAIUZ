@@ -50,7 +50,7 @@ public class MeasurementService {
                 : seriesRepository.findAllById(seriesIds);
         if (from == null) from = OffsetDateTime.parse("1970-01-01T00:00:00Z");
         if (to == null) to = OffsetDateTime.now();
-        return measurementRepository.findBySeriesInAndTimestampBetween(series, from, to, pageable);
+        return measurementRepository.findBySeriesInAndTimestampBetweenWithSeries(series, from, to, pageable);
     }
 
     public List<Measurement> getAll() {

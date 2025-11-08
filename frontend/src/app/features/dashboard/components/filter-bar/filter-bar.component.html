@@ -1,7 +1,6 @@
 <form [formGroup]="filterForm">
   <mat-toolbar class="filter-toolbar">
     <div class="filter-content">
-      <!-- Series Selection -->
       <div class="filter-group series-group">
         <div class="series-chips">
           <div class="series-chip-container">
@@ -18,12 +17,9 @@
         </div>
       </div>
 
-      <!-- Date Range and Actions Container for medium screens -->
       <div class="controls-container">
-        <!-- Date Range -->
         <div class="filter-group date-group">
           <div class="date-range-container">
-            <!-- Quick Range Buttons -->
             <mat-button-toggle-group 
               formControlName="quickRange"
               (change)="onQuickRangeChanged($event.value)"
@@ -33,7 +29,6 @@
               <mat-button-toggle value="custom">Custom</mat-button-toggle>
             </mat-button-toggle-group>
 
-            <!-- Date Pickers -->
             <div class="date-pickers" *ngIf="filterForm.get('quickRange')?.value === 'custom'">
               <mat-form-field appearance="outline" class="date-field">
                 <mat-label>From</mat-label>
@@ -60,7 +55,6 @@
           </div>
         </div>
 
-        <!-- Action Buttons -->
         <div class="action-buttons">
           <button mat-raised-button color="primary" (click)="onRefresh()">
             <mat-icon>refresh</mat-icon>

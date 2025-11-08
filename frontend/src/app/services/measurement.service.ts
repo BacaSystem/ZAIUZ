@@ -12,11 +12,11 @@ export class MeasurementService {
 
   constructor(private http: HttpClient) { }
 
-  queryMeasurements(query: MeasurementQuery): Observable<PaginatedResponse<Measurement>> {
+  queryMeasurements(query: any): Observable<PaginatedResponse<Measurement>> {
     let params = new HttpParams();
     
     if (query.seriesIds && query.seriesIds.length > 0) {
-      query.seriesIds.forEach(id => {
+      query.seriesIds.forEach((id: string) => {
         params = params.append('seriesIds', id);
       });
     }
@@ -36,6 +36,10 @@ export class MeasurementService {
     if (query.size !== undefined) {
       params = params.set('size', query.size.toString());
     }
+    
+    if (query.sort) {
+      params = params.set('sort', query.sort);
+    }
 
     return this.http.get<PaginatedResponse<Measurement>>(this.apiUrl, { params });
   }
@@ -44,7 +48,7 @@ export class MeasurementService {
     return this.http.get<Measurement>(`${this.apiUrl}/${id}`);
   }
 
-  createMeasurement(measurement: Omit<Measurement, 'id'>): Observable<Measurement> {
+  createMeasurement(measurement: Omit<Measurement, 'id' | 'series'>): Observable<Measurement> {
     return this.http.post<Measurement>(this.apiUrl, measurement);
   }
 

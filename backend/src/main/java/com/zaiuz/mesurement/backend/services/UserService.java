@@ -17,14 +17,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
+    public User create(User user) {
         return userRepository.save(user);
     }
 
-    public User updateUser(UUID id, User userDetails) {
-        if (getUser(id).isEmpty()) return null;
+    public User update(UUID id, User userDetails) {
+        if (get(id).isEmpty()) return null;
 
-        User user = getUser(id).get();
+        User user = get(id).get();
         user.setUsername(userDetails.getUsername());
         user.setPassword(userDetails.getPassword());
         user.setRole(userDetails.getRole());
@@ -33,15 +33,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getUsers() {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUser(UUID id) {
+    public Optional<User> get(UUID id) {
         return userRepository.findById(id);
     }
 
-    public Optional<User> getUser(String username) {
+    public Optional<User> get(String username) {
         return userRepository.findByUsername(username);
     }
 

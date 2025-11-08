@@ -1,6 +1,5 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,10 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FilterBarComponent } from './components/filter-bar/filter-bar.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { DataTableComponent } from './components/data-table/data-table.component';
-import { AdminDrawerComponent } from './components/admin-drawer/admin-drawer.component';
-import { NavbarComponent } from '../../shared/components/nav-bar/nav-bar.component';
-import { FilterOptions, Series, Measurement } from '../../shared/models/interfaces';
-import { AdminDrawerService } from '../../services/admin-drawer.service';
+import { FilterOptions, Measurement } from '../../shared/models/interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,18 +21,12 @@ import { AdminDrawerService } from '../../services/admin-drawer.service';
     MatCardModule,
     FilterBarComponent,
     ChartComponent,
-    DataTableComponent,
-    AdminDrawerComponent,
-    NavbarComponent
+    DataTableComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private adminDrawerService = inject(AdminDrawerService);
-  
-  isAdminMode = signal(false);
+export class DashboardComponent {
   selectedMeasurement = signal<Measurement | null>(null);
   currentFilters = signal<FilterOptions>({
     seriesIds: [],
@@ -44,14 +34,6 @@ export class DashboardComponent implements OnInit {
     dateTo: null,
     quickRange: '7d'
   });
-
-  // Use service for drawer state
-  isDrawerOpen = this.adminDrawerService.isOpen;
-
-  ngOnInit(): void {
-    // Set admin mode to true by default
-    this.isAdminMode.set(true);
-  }
 
   onFiltersChanged(filters: FilterOptions): void {
     this.currentFilters.set(filters);
@@ -63,14 +45,6 @@ export class DashboardComponent implements OnInit {
 
   onChartPointSelected(measurement: Measurement): void {
     this.selectedMeasurement.set(measurement);
-  }
-
-  toggleAdminDrawer(): void {
-    this.adminDrawerService.toggle();
-  }
-
-  onDrawerClosed(): void {
-    this.adminDrawerService.close();
   }
 
   onPrintRequested(): void {

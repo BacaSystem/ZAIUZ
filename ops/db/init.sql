@@ -1,11 +1,5 @@
--- Minimalna baza danych dla systemu pomiarów IoT
--- Przygotowana pod Entity Framework Core
-
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Tabele
-
--- Użytkownicy (ASP.NET Identity stworzy własne tabele, to tylko dla aplikacji)
 CREATE TABLE users (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username    TEXT UNIQUE NOT NULL,
@@ -16,20 +10,18 @@ CREATE TABLE users (
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Serie pomiarowe
 CREATE TABLE series (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name        TEXT NOT NULL UNIQUE,
     min_value   DOUBLE PRECISION NOT NULL,
     max_value   DOUBLE PRECISION NOT NULL,
-    color       TEXT NOT NULL DEFAULT '#007bff',
+    color       TEXT NOT NULL DEFAULT '#2196F3',
     created_by  TEXT NOT NULL DEFAULT 'system',
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     CONSTRAINT chk_range CHECK (max_value > min_value)
 );
 
--- Pomiary
 CREATE TABLE measurements (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     series_id   UUID NOT NULL REFERENCES series(id) ON DELETE CASCADE,
@@ -40,18 +32,16 @@ CREATE TABLE measurements (
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Indeks dla zapytań po czasie i serii
 CREATE INDEX idx_measurements_series_time ON measurements(series_id, timestamp);
 
--- Dane przykładowe
-INSERT INTO users (username, password, role) VALUES ('admin', '$2a$12$XY0Kc0vATrMrVnLTSuOMJuXmFtdDCFCRNH8alsTgEkiOz/Wu/l.Si', 'Admin'), ('user', '$2a$12$Fcfr/dvOLbDyRhh9qsTcN.8eKLBmQbdDjUP5lLQ1J/sukiga6X0mW', 'User');
+INSERT INTO users (username, password, role) VALUES 
+    ('admin', '$2a$10$zI1OiqwfCkESmRBHrwGW9uMOEZBuhVVGFhMGGHVft/59ODya/OWoS', 'Admin'), 
+    ('user', '$2a$10$zI1OiqwfCkESmRBHrwGW9uMOEZBuhVVGFhMGGHVft/59ODya/OWoS', 'User');
 
--- Dwie serie przykładowe
 INSERT INTO series (name, min_value, max_value, color) VALUES 
-    ('Temperatura', -30, 60, '#FF6B6B'),
-    ('Wilgotność', 0, 100, '#4D96FF');
+    ('Temperatura', -30, 60, '#F44336'),
+    ('Wilgotność', 0, 100, '#2196F3');
 
--- Wygeneruj kilka przykładowych pomiarów dla ostatnich 7 dni
 DO $$
 DECLARE
     s_temp UUID;

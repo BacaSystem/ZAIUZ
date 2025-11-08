@@ -19,7 +19,7 @@ public class Measurement {
     @GeneratedValue
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "series_id", nullable = false)
     private Series series;
 
