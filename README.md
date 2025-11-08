@@ -1,104 +1,194 @@
 # System Zarządzania Pomiarami ZAIUZ
 
-Kompleksowy system zarządzania danymi pomiarowymi IoT zbudowany w oparciu o Spring Boot, Angular i PostgreSQL. Aplikacja zapewnia zbieranie pomiarów w czasie rzeczywistym, wizualizację danych oraz funkcje administracyjne dla danych z czujników IoT.
+Kompleksowy system zarządzania danymi pomiarowymi IoT zbudowany w oparciu o technologie Spring Boot, Angular i PostgreSQL. Aplikacja zapewnia zbieranie pomiarów w czasie rzeczywistym, wizualizację danych oraz funkcje administracyjne dla danych z czujników IoT.
 
 ## Spis treści
 
-- Przegląd
-- Funkcjonalności  
-- Architektura
-- Stos technologiczny
-- Schema bazy danych
-- Dokumentacja API
-- Struktura frontend
-- Szybki start
-- Konfiguracja środowiska lokalnego
-- Wdrożenie Docker
-- Uwierzytelnianie i autoryzacja
-- Konfiguracja
-- Testowanie
+1. [Przegląd](#Przegląd)
+2. [Funkcjonalności](#Funkcjonalności)
+3. [Architektura systemu](#architektura-systemu)
+4. [Technologie i narzędzia](#technologie-i-narzędzia)
+5. [Model danych](#model-danych)
+6. [Dokumentacja API](#dokumentacja-api)
+7. [Uwierzytelnianie i autoryzacja](#uwierzytelnianie-i-autoryzacja)
+8. [Uruchomienie lokalne](#uruchomienie-lokalne)
 
 ## Przegląd
 
 ZAIUZ to pełnowarstwowy system pomiarów IoT przeznaczony do zbierania, przechowywania i wizualizacji danych z czujników z różnych serii pomiarowych (temperatura, wilgotność, itp.). System zapewnia kontrolę dostępu opartą na rolach z oddzielnymi interfejsami dla zwykłych użytkowników i administratorów.
 
-### Kluczowe możliwości
+### Główne cechy
+- **Architektura**: Aplikacja trójwarstwowa (Frontend Angular + Backend Spring Boot + PostgreSQL)
+- **RESTful API**: Kompleksowe REST API z dokumentacją Swagger
+- **Bezpieczeństwo**: Uwierzytelnianie i autoryzacja JWT z rolami użytkowników
+- **Wizualizacja**: Interaktywne wykresy w czasie rzeczywistym
+- **Responsywność**: Nowoczesny interfejs użytkownika przystosowany do urządzeń mobilnych
+- **Konteneryzacja**: Pełne wsparcie Docker/Docker Compose
 
-- Zbieranie pomiarów w czasie rzeczywistym: Pozyskiwanie i przechowywanie pomiarów z czujników IoT
-- Wizualizacja danych: Interaktywne wykresy i dashboardy do analizy pomiarów
-- Obsługa wielu serii: Obsługa wielu typów pomiarów z konfigurowalnymi zakresami i kolorami
-- Zarządzanie użytkownikami: Kontrola dostępu oparta na rolach (role Admin/User)
-- RESTful API: Kompleksowe REST API z dokumentacją Swagger
-- Responsywny UI: Nowoczesny interfejs użytkownika oparty na Angular z Material Design
 
 ## Funkcjonalności
 
-### Podstawowe funkcje
-- Interaktywny Dashboard: Wizualizacja pomiarów w czasie rzeczywistym z Chart.js
-- ![img.png](documentation/dahsboard.png)
-- Uwierzytelnianie JWT: Bezpieczny system uwierzytelniania oparty na tokenach
-- ![img.png](documentation/login.png)
-- Zarządzanie użytkownikami: Panel administratora do tworzenia i zarządzania użytkownikami
-- ![img.png](documentation/admin_users.png)
-- Zarządzanie seriami: Konfiguracja serii pomiarowych z niestandardowymi zakresami i kolorami
-- ![img.png](documentation/admin_series.png)
-- ![img.png](documentation/admin_measurements.png)
-- Zaawansowane filtrowanie: Zapytania o pomiary według zakresu czasowego, serii i paginacji
-- Responsywny design: Interfejs przyjazny dla urządzeń mobilnych używający Angular Material
-- Możliwośc zmiana hasła przez zalogowanego uzytkownika
-- ![img.png](documentation/change_password.png)
+### Dashboard
+![Dashboard](./documentation/dahsboard.png)
 
-### Funkcje administracyjne
-- Konfiguracja serii: Tworzenie i zarządzanie seriami pomiarowymi
-- Zarządzanie pomiarami: Operacje CRUD dla danych pomiarowych
-- Administracja użytkowników: Zarządzanie kontami użytkowników i rolami
-- Eksport danych: Zapytania i eksport danych pomiarowych
-- Dostęp oparty na rolach: Oddzielne interfejsy administratora i użytkownika
+Dashboard jest głównym interfejsem aplikacji, dostępnym dla wszystkich użytkowników. Stanowi centralne miejsce do wizualizacji i analizy danych pomiarowych z różnych serii czujników IoT. Interfejs został zaprojektowany z myślą o intuicyjności i responsywności, umożliwiając łatwe przeglądanie danych zarówno na komputerach stacjonarnych, jak i urządzeniach mobilnych.
 
-### Technical Features
-- Gotowość na mikrousługi: Architektura kontenerowa z Docker
-- Dokumentacja API: Interaktywna dokumentacja Swagger UI
-- Monitorowanie stanu: Kontrole stanu aplikacji i monitorowanie
-- PostgreSQL: Solidna relacyjna baza danych z zoptymalizowanymi zapytaniami
-- Zarządzanie konfiguracją: Konfiguracja oparta na środowisku
+**Funkcjonalności:**
+- Interaktywne wykresy serii pomiarowych w czasie rzeczywistym
+- Filtry czasowe (7 dni, 30 dni, okres niestandardowy)
+- Selekcja serii pomiarowych do wyświetlenia
+- Tabela danych z paginacją i sortowaniem
+- Funkcja eksportu do druku
+- Synchronizacja między wykresem a tabelą
 
-## Architektura
+### Panel administratora - Zarządzanie seriami
+![Admin Series](./documentation/admin_series.png)
+
+Moduł zarządzania seriami pomiarowymi jest kluczowym elementem panelu administracyjnego, umożliwiającym konfigurację i zarządzanie typami pomiarów w systemie. Administratorzy mogą definiować różne serie (np. temperatura, wilgotność, ciśnienie) wraz z ich charakterystykami, takimi jak zakresy wartości i kolory reprezentacyjne używane na wykresach.
+
+**Funkcjonalności:**
+- Lista wszystkich serii pomiarowych
+- Dodawanie nowych serii z kolorami i zakresami wartości
+- Edycja istniejących serii
+- Usuwanie serii (z kaskowaniem powiązanych pomiarów)
+- Podgląd kolorów serii
+
+
+### Panel administratora - Zarządzanie pomiarami
+![Admin Measurements](./documentation/admin_measurements.png)
+
+Sekcja zarządzania pomiarami dostarcza administratorom narzędzia do bezpośredniego manipulowania danymi pomiarowymi w systemie. Umożliwia przeglądanie, dodawanie, edycję i usuwanie pojedynczych pomiarów, co jest szczególnie przydatne przy korygowaniu błędnych danych, dodawaniu pomiarów historycznych lub testowaniu systemu z przykładowymi danymi.
+
+**Funkcjonalności:**
+- Lista wszystkich pomiarów z paginacją
+- Dodawanie nowych pomiarów z wyborem serii i datą
+- Edycja istniejących pomiarów
+- Walidacja danych dla ograniczeń serii
+- Usuwanie pomiarów
+
+### Panel administratora - Zarządzanie użytkownikami
+![Admin Users](./documentation/admin_users.png)
+
+Moduł zarządzania użytkownikami pozwala administratorom na pełną kontrolę nad kontami użytkowników w systemie. Obejmuje to tworzenie nowych kont, zarządzanie rolami i uprawnieniami, oraz administrowanie istniejącymi użytkownikami. System implementuje kontrolę dostępu opartą na rolach (RBAC), gdzie użytkownicy mogą mieć role "User" lub "Admin" z różnymi poziomami uprawnień.
+
+**Funkcjonalności:**
+- Lista wszystkich użytkowników systemu
+- Dodawanie nowych użytkowników z przypisaniem ról
+- Edycja danych użytkowników
+- Usuwanie użytkowników
+- Zarządzanie rolami (User/Admin)
+- Wizualne oznaczenie ról
+
+### Uwierzytelnianie
+
+System uwierzytelniania zapewnia bezpieczny dostęp do aplikacji poprzez mechanizm logowania oparty na tokenach JWT. Interfejs logowania jest prosty i intuicyjny, z walidacją po stronie klienta oraz bezpiecznym przesyłaniem danych uwierzytelniających. Po pomyślnym zalogowaniu użytkownik otrzymuje token, który jest automatycznie dołączany do wszystkich żądań API.
+
+**Funkcjonalności:**
+- Formularz logowania z walidacją
+- Uwierzytelnianie JWT
+- Pamiętanie sesji użytkownika
+- Automatyczne przekierowanie po uwierzytelnieniu
+
+### Zmiana hasła
+
+Funkcja zmiany hasła umożliwia zalogowanym użytkownikom bezpieczną aktualizację swoich danych uwierzytelniających. Proces jest wieloetapowy i wymaga potwierdzenia tożsamości poprzez podanie aktualnego hasła, co zapobiega nieautoryzowanym zmianom. System wymusza również silne hasła oraz ich potwierdzenie, aby zminimalizować ryzyko błędów przy wprowadzaniu nowego hasła.
+
+**Funkcjonalności:**
+- Bezpieczna zmiana hasła dla zalogowanych użytkowników
+- Walidacja obecnego hasła
+- Wymagania dotyczące nowego hasła
+- Potwierdzenie nowego hasła
+
+---
+
+
+## Architektura systemu
+
+Aplikacja ZAIUZ została zaprojektowana w oparciu o nowoczesną architekturę wielowarstwową, składającą się z oddzielnych, ale współpracujących ze sobą komponentów. Architektura ta zapewnia skalowalność oraz łatwość rozwoju i wdrażania. System wykorzystuje konteneryzację Docker do zapewnienia spójności środowiska oraz łatwego deploymentu.
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │    Backend      │    │   Database      │
-│                 │    │                 │    │                 │
-│   Angular 20    │───▶│  Spring Boot 3  │───▶│ PostgreSQL 16   │
-│   Material UI   │    │    Java 21      │    │                 │
-│   Chart.js      │    │  JWT Security   │    │ Measurement     │
-│   Nginx         │    │  Swagger API    │    │ Data Storage    │
-│                 │    │                 │    │                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-      Port 80              Port 8080              Port 5432
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│     Client      │    │    Frontend     │    │     Backend     │    │    Database     │
+│                 │    │                 │    │                 │    │                 │
+│   Browser       │    │   Angular 20    │    │  Spring Boot 3  │    │ PostgreSQL 16   │
+│   Mobile        │<-->│   Material UI   │<-->│  Java 21        │<-->│                 │
+│   API           │    │   Chart.js      │    │  JWT Security   │    │ Measurement     │
+│                 │    │   Nginx         │    │  Swagger API    │    │ Series          │
+│                 │    │                 │    │                 │    │ Users           │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+                              Port 80              Port 8080              Port 5432
 ```
-
 ### Architektura komponentów
-
 #### Frontend (Angular)
-- Komponenty autonomiczne: Nowoczesna architektura komponentów autonomicznych Angular
-- Usługi: Usługi klienta HTTP do komunikacji z API
-- Strażnicy: Ochrona tras z kontrolą dostępu opartą na rolach
-- Interceptory: Automatyczne wstrzykiwanie tokenów JWT dla wywołań API
-- Material Design: Spójny interfejs użytkownika używający komponentów Angular Material
+```
+src/
+├── app/
+│   ├── features/
+│   │   ├── dashboard/                  # Dashboard - strona główna
+│   │   │   ├── components/
+│   │   │   │   ├── chart/              # Komponenty wykresów
+│   │   │   │   ├── data-table/         # Tabela danych
+│   │   │   │   └── filter-bar/         # Pasek filtrów
+│   │   │   └── dashboard.component.ts
+│   │   ├── admin/                      # Panel administratora
+│   │   │   ├── components/
+│   │   │   │   ├── series-form/        # Formularze serii
+│   │   │   │   ├── series-table/       # Tabele serii
+│   │   │   │   ├── measurement-form/   # Formularze pomiarów
+│   │   │   │   ├── measurement-table/  # Tabele pomiarów
+│   │   │   │   ├── user-form/          #   Formularze użytkowników
+│   │   │   │   └── user-table/         # Tabele użytkowników
+│   │   │   └── admin.component.ts
+│   │   ├── auth/                       # Uwierzytelnianie
+│   │   └── change-password/            # Zmiana hasła
+│   ├── services/                       # Usługi HTTP
+│   ├── guards/                         # Strażnicy tras
+│   ├── interceptors/                   # Interceptory HTTP
+│   └── shared/                         # Komponenty współdzielone
+```
+
+Frontend aplikacji został zbudowany w oparciu o Angular 20 z wykorzystaniem standalone components - nowoczesnego podejścia, które eliminuje potrzebę NgModules i upraszcza strukturę aplikacji. Architektura opiera się na podziale funkcjonalny (feature-based), gdzie każda główna funkcjonalność (dashboard, admin, auth) ma swój dedykowany moduł z własnymi komponentami, usługami i logiką.
+
 
 #### Backend (Spring Boot)
-- Kontrolery: Punkty końcowe RESTful API z dokumentacją OpenAPI
-- Usługi: Warstwa logiki biznesowej do przetwarzania danych
-- Repozytoria: Repozytoria JPA do dostępu do bazy danych
-- Bezpieczeństwo: Uwierzytelnianie oparte na JWT z autoryzacją opartą na rolach
-- Encje: Encje JPA mapowane na tabele bazy danych
+```
+src/main/java/com/zaiuz/mesurement/backend/
+├── controllers/
+│   ├── AuthController.java          # Uwierzytelnianie
+│   ├── AdminController.java         # Operacje administracyjne
+│   ├── MeasurementController.java   # API pomiarów
+│   └── SeriesController.java        # API serii
+├── domain/
+│   ├── User.java                    # Encja użytkownika
+│   ├── Series.java                  # Encja serii
+│   ├── Measurement.java             # Encja pomiaru
+│   └── dto/                         # Obiekty transferu danych
+├── services/
+│   ├── UserService.java             # Logika użytkowników
+│   ├── SeriesService.java           # Logika serii
+│   └── MeasurementService.java      # Logika pomiarów
+├── repositories/
+│   ├── UserRepository.java          # Repozytorium użytkowników
+│   ├── SeriesRepository.java        # Repozytorium serii
+│   └── MeasurementRepository.java   # Repozytorium pomiarów
+└── security/
+    ├── SecurityConfig.java          # Konfiguracja bezpieczeństwa
+    ├── JwtService.java              # Usługa JWT
+    └── JwtAuthFilter.java           # Filtr uwierzytelniania
+```
+
+Backend aplikacji został zaimplementowany przy użyciu Spring Boot 3.5.6 z Java 21, wykorzystując najnowsze możliwości platformy. Architektura podąża za wzrocem MVC z jasnym podziałem odpowiedzialności: Controllers obsługują żądania HTTP i dokumentację API, Services zawierają logikę biznesową, Repositories zarządzają dostępem do danych, a warstwa Security implementuje uwierzytelnianie JWT i autoryzację opartą na rolach.
+
+
+
+System wykorzystuje Spring Data JPA do mapowania obiektowo-relacyjnego, co zapewnia wydajny i type-safe dostęp do bazy danych. Konfiguracja bezpieczeństwa oparta jest na Spring Security z customowymi filtrami JWT, które automatycznie walidują tokeny i zarządzają kontekstem bezpieczeństwa dla każdego żądania.
 
 #### Baza danych (PostgreSQL)
 - Zoptymalizowana schema: Tabele z indeksami dla szybkiej wydajności zapytań
 - Przykładowe dane: Wstępnie wypełnione seriami temperatury i wilgotności
 - Pola audytu: Znaczniki czasu utworzenia/aktualizacji i śledzenie użytkowników
 
-## Stos technologiczny
+## Technologie i narzędzia
 
 ### Backend
 - Framework: Spring Boot 3.5.6
@@ -114,106 +204,39 @@ ZAIUZ to pełnowarstwowy system pomiarów IoT przeznaczony do zbierania, przecho
 - Framework: Angular 20.3.0
 - Biblioteka UI: Angular Material 20.2.9
 - Wykresy: Chart.js 4.5.1 z ng2-charts
-- Stylowanie: SCSS z niestandardowymi motywami
+- Stylowanie: SCSS z własnymi motywami
 - HTTP: Angular HTTP Client z interceptorami
 - Uwierzytelnianie: Biblioteka JWT decode
 - Narzędzie budowania: Angular CLI
 
 ### Infrastruktura
-- Konteneryzacja: Docker z budowami wieloetapowymi
+- Konteneryzacja: Docker z wieloetapowymi buildami
 - Serwer WWW: Nginx (do serwowania frontend)
 - Baza danych: PostgreSQL 16 z trwałymi wolumenami
 - Orkiestracja: Docker Compose
 - Kontrole stanu: Monitorowanie stanu kontenerów
-
-## Schema bazy danych
-
-### Przegląd tabel
-
-#### Tabela `users`
-```sql
-- id (UUID, Primary Key)
-- username (TEXT, Unique)
-- password (TEXT, Hashed)
-- role (TEXT) - 'Admin' lub 'User'
-- created_by (TEXT)
-- created_at (TIMESTAMPTZ)
-- updated_at (TIMESTAMPTZ)
-```
-
-#### Tabela `series`
-```sql
-- id (UUID, Primary Key)
-- name (TEXT, Unique) - np. 'Temperature', 'Humidity'
-- min_value (DOUBLE PRECISION)
-- max_value (DOUBLE PRECISION)
-- color (TEXT) - Kod koloru Hex dla wykresów
-- created_by (TEXT)
-- created_at (TIMESTAMPTZ)
-- updated_at (TIMESTAMPTZ)
-```
-
-#### Tabela `measurements`
-```sql
-- id (UUID, Primary Key)
-- series_id (UUID, Foreign Key → series.id)
-- value (DOUBLE PRECISION)
-- timestamp (TIMESTAMPTZ)
-- created_by (TEXT)
-- created_at (TIMESTAMPTZ)
-- updated_at (TIMESTAMPTZ)
-
-Index: idx_measurements_series_time (series_id, timestamp)
-```
+- Kontrola wersji: git + github
+## Model danych
 
 ### Diagram schematyczny bazy danych
 
 ```
-┌─────────────────────┐
-│      USERS          │
-├─────────────────────┤
-│ • id (UUID) PK      │
-│ • username (TEXT)   │
-│ • password (TEXT)   │
-│ • role (TEXT)       │
-│ • created_by        │
-│ • created_at        │
-│ • updated_at        │
-└─────────────────────┘
-
-┌─────────────────────┐
-│      SERIES         │
-├─────────────────────┤
-│ • id (UUID) PK      │
-│ • name (TEXT)       │
-│ • min_value (FLOAT) │
-│ • max_value (FLOAT) │
-│ • color (TEXT)      │
-│ • created_by        │
-│ • created_at        │
-│ • updated_at        │
-└─────────────────────┘
-         │
-         │ 1:N
-         ▼
-┌─────────────────────┐
-│   MEASUREMENTS      │
-├─────────────────────┤
-│ • id (UUID) PK      │
-│ • series_id (UUID)  │─────┐
-│ • value (FLOAT)     │     │
-│ • timestamp         │     │
-│ • created_by        │     │
-│ • created_at        │     │
-│ • updated_at        │     │
-└─────────────────────┘     │
-                            │
-                            └─FK→ SERIES.id
+┌─────────────────────┐        ┌─────────────────────┐         ┌─────────────────────┐
+│        USERS        │        │       SERIES        │         │     MEASUREMENTS    │
+├─────────────────────┤        ├─────────────────────┤         ├─────────────────────┤
+│ • id (UUID) PK      │        │ • id (UUID) PK      │         │ • id (UUID) PK      │
+│ • username (TEXT)   │        │ • name (TEXT)       │         │ • series_id (UUID)  │
+│ • password (TEXT)   │        │ • min_value (FLOAT) │ ------> │ • value (FLOAT)     │
+│ • role (TEXT)       │        │ • max_value (FLOAT) │   1:N   │ • timestamp         │
+│ • created_by        │        │ • color (TEXT)      │         │ • created_by        │
+│ • created_at        │        │ • created_by        │         │ • created_at        │
+│ • updated_at        │        │ • created_at        │         │ • updated_at        │
+│                     │        │ • updated_at        │         │                     │
+└─────────────────────┘        └─────────────────────┘         └─────────────────────┘
 ```
 
-### Relacje
-- Jeden-do-wielu: Series → Measurements (z CASCADE delete)
-- Zoptymalizowane zapytania: Indeks złożony na series_id i timestamp dla szybkich zapytań szeregów czasowych
+Model danych składa się z trzech głównych encji połączonych relacjami. Tabela `users` przechowuje informacje o użytkownikach systemu wraz z ich rolami i danymi audytowymi. Tabela `series` definiuje typy pomiarów z ich charakterystykami (zakresy wartości, kolory). Tabela `measurements` zawiera faktyczne dane pomiarowe powiązane z konkretną serią przez klucz obcy. Wszystkie tabele zawierają pola audytowe (created_at, updated_at, created_by) dla śledzenia zmian.
+
 
 ### Przykładowe dane
 - Domyślni użytkownicy: admin/admin, user/user (oba z hasłem 'password')
@@ -255,52 +278,34 @@ API zapewnia kompleksowe punkty końcowe RESTful z pełną dokumentacją Swagger
 | DELETE | `/api/admin/users/{id}` | Usuń użytkownika |
 
 ### Funkcje API
+
 - Paginacja: Wszystkie punkty końcowe list obsługują paginację z parametrami `page`, `size` i `sort`
 - Filtrowanie: Zapytania o pomiary obsługują filtrowanie według `seriesIds`, zakresów dat `from` i `to`
 - Walidacja: Walidacja żądań z szczegółowymi komunikatami błędów
 - CORS: Skonfigurowane dla pochodzenia frontend z odpowiednimi nagłówkami
 - Dokumentacja: Interaktywny Swagger UI pod adresem `/swagger-ui.html`
 
-## Struktura Frontend
+# Uwierzytelnianie i autoryzacja
 
-### Routing
-```typescript
-/ → Dashboard (Publiczny)
-/auth/login → Strona logowania
-/admin → Panel administratora (Wymagana rola Admin)
-/change-password → Zmiana hasła (Uwierzytelniony)
-```
+### Implementacja JWT
 
-### Architektura komponentów
+System używa tokenów JWT (JSON Web Tokens) do bezstanowego uwierzytelniania użytkowników. Po pomyślnym zalogowaniu serwer generuje podpisany token zawierający informacje o użytkowniku i jego rolach, który następnie jest przesyłany z każdym żądaniem API w nagłówku Authorization.
 
-#### Moduły funkcjonalne
-- Dashboard: Główny dashboard wizualizacji pomiarów
-- Admin: Interfejs administracyjny z sekcjami w kartach
-- Auth: Komponenty uwierzytelniania (logowanie, rejestracja)
-- Change Password: Zarządzanie hasłami użytkowników
+![img_6.png](documentation/jwt.png)
 
-#### Komponenty współdzielone
-- Navigation Bar: Nagłówek aplikacji z menu użytkownika
-- Confirm Dialog: Wielokrotnego użytku dialogi potwierdzenia
-- Form Components: Formularze serii, pomiarów i użytkowników
-- Table Components: Wyświetlanie danych z paginacją i akcjami
 
-#### Usługi
-- AuthService: Zarządzanie stanem uwierzytelniania i obsługa JWT
-- MeasurementService: Operacje na danych pomiarowych
-- SeriesService: Operacje na danych serii
-- AdminService: Operacje administracyjne
 
-#### Strażnicy i Interceptory
-- AuthGuard: Ochrona tras z dostępem opartym na rolach
-- AuthInterceptor: Automatyczne wstrzykiwanie tokenów JWT
+### Role
+- Admin: Pełny dostęp do systemu włączając zarządzanie użytkownikami i administrację danych
+- User: Dostęp tylko do odczytu danych pomiarowych i serii
 
-### Zarządzanie stanem
-- Angular Signals: Nowoczesne reaktywne zarządzanie stanem
-- Local Storage: Trwałość tokenów JWT i sesji użytkownika
-- RxJS: Reaktywne strumienie danych i operacje HTTP
+### Funkcje bezpieczeństwa
+- Hashowanie haseł: Hashowanie haseł BCrypt
+- Ochrona CORS: Skonfigurowane dozwolone źródła
+- Strażnicy tras: Ochrona tras frontend oparta na rolach
+- Bezpieczeństwo API: Ochrona punktów końcowych oparta na rolach
 
-## Szybki start
+## Uruchomienie lokalne
 
 ### Wymagania wstępne
 - Docker i Docker Compose
@@ -312,7 +317,7 @@ API zapewnia kompleksowe punkty końcowe RESTful z pełną dokumentacją Swagger
 
 1. Sklonuj repozytorium
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/BacaSystem/ZAIUZ.git
    cd ZAIUZ
    ```
 
@@ -331,231 +336,17 @@ API zapewnia kompleksowe punkty końcowe RESTful z pełną dokumentacją Swagger
    - Admin: `admin` / `password`
    - User: `user` / `password`
 
-## Konfiguracja środowiska lokalnego
 
-### Rozwój Backend
-
-1. Wymagania wstępne
-   ```bash
-   # Upewnij się, że Java 21 jest zainstalowana
-   java -version
-   
-   # Uruchom PostgreSQL (lub użyj Docker)
-   docker run --name measurements-db -e POSTGRES_DB=measurements_db -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -p 5433:5432 -d postgres:16
-   ```
-
-2. Uruchom backend
-   ```bash
-   cd backend
-   ./gradlew bootRun
-   
-   # Lub na Windows
-   gradlew.bat bootRun
-   ```
-
-3. Zweryfikuj backend
-   - API: http://localhost:8080
-   - Swagger: http://localhost:8080/swagger-ui.html
-   - Health: http://localhost:8080/actuator/health
-
-### Rozwój Frontend
-
-1. Wymagania wstępne
-   ```bash
-   # Upewnij się, że Node.js 18+ jest zainstalowany
-   node --version
-   npm --version
-   ```
-
-2. Zainstaluj zależności
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-3. Uruchom frontend
-   ```bash
-   ng serve
-   
-   # Lub z określoną konfiguracją
-   ng serve --configuration development
-   ```
-
-4. Uzyskaj dostęp do aplikacji
-   - Frontend: http://localhost:4200
-   - Proxy development przekieruje wywołania API do backendu
-
-### Konfiguracja bazy danych
-
-Baza danych jest automatycznie inicjalizowana z:
-- Wymaganymi tabelami i indeksami
-- Przykładowymi danymi (serie temperatury i wilgotności)
-- Domyślnymi kontami użytkowników
-
-## Wdrożenie Docker
-
-### Wdrożenie rozwojowe
-```bash
-cd ops
-docker-compose up --build -d
-```
-
-### Wdrożenie produkcyjne
-```bash
-cd ops
-docker-compose -f docker-compose.production.yml --env-file .env.production up --build -d
-```
-
-### Konfiguracja środowiska
-
-Utwórz plik `.env` w katalogu `ops`:
-```bash
-# Konfiguracja bazy danych
-POSTGRES_DB=measurements_db
-POSTGRES_USER=user
-POSTGRES_PASSWORD=your_secure_password
-
-# Konfiguracja JWT
-JWT_SECRET_KEY=your_secure_jwt_secret_key
-JWT_EXPIRATION_TIME=3600000
-
-# Porty aplikacji
-BACKEND_PORT=8080
-FRONTEND_PORT=3000
-PG_PORT=5433
-
-# Konfiguracja CORS
-FRONTEND_ORIGIN=http://localhost:4200
-```
-
-### Uwagi dotyczące produkcji
-- Użyj silnych haseł i sekretów JWT
-- Skonfiguruj HTTPS z reverse proxy
-- Użyj zarządzanych usług bazy danych
-- Włącz odpowiednie logowanie i monitorowanie
-- Skonfiguruj strategie kopii zapasowych
-
-## Uwierzytelnianie i autoryzacja
-
-### Implementacja JWT
-- Oparte na tokenach: Bezstanowe uwierzytelnianie używające tokenów JWT
-- Wygaśnięcie: Konfigurowalne wygaśnięcie tokena (domyślnie: 1 godzina)
-- Odświeżanie: Wymagane ręczne ponowne uwierzytelnienie po wygaśnięciu
-- Przechowywanie: Tokeny przechowywane w localStorage przeglądarki
-
-### Role
-- Admin: Pełny dostęp do systemu włączając zarządzanie użytkownikami i administrację danych
-- User: Dostęp tylko do odczytu danych pomiarowych i serii
-
-### Funkcje bezpieczeństwa
-- Hashowanie haseł: Hashowanie haseł BCrypt
-- Ochrona CORS: Skonfigurowane dozwolone źródła
-- Strażnicy tras: Ochrona tras frontend oparta na rolach
-- Bezpieczeństwo API: Ochrona punktów końcowych oparta na rolach
-
-## Konfiguracja
-
-### Konfiguracja Backend (`application.properties`)
-```properties
-# Baza danych
-spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/measurements_db}
-spring.datasource.username=${SPRING_DATASOURCE_USERNAME:user}
-spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:password}
-
-# JWT
-security.jwt.secret-key=${JWT_SECRET_KEY:default_secret}
-security.jwt.expiration-time=${JWT_EXPIRATION_TIME:3600000}
-
-# CORS
-cors.allowed-origins=${FRONTEND_ORIGIN:http://localhost:4200}
-
-# Swagger
-springdoc.swagger-ui.path=/swagger-ui.html
-```
-
-### Konfiguracja Frontend
-```typescript
-// environments/environment.ts
-export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:8080'
-};
-```
-
-### Konfiguracja Docker
-- Budowy wieloetapowe dla zoptymalizowanych obrazów kontenerów
-- Kontrole stanu dla monitorowania usług
-- Trwałość wolumenów dla danych bazy danych
-- Izolacja sieci między usługami
-
-## Testowanie
-
-### Testowanie Backend
-```bash
-cd backend
-./gradlew test
-```
-
-### Testowanie Frontend
-```bash
-cd frontend
-npm test
-npm run test:coverage
-```
-
-### Testowanie API
-- Użyj Swagger UI do interaktywnego testowania API
-- Kolekcja Postman dostępna do kompleksowego testowania
-- Testy integracyjne zawarte w pakiecie testów backend
-
-### Development Workflow
-1. Fork the repository
-## Wymagania projektu
-
-System ZAIUZ realizuje następujące wymagania funkcjonalne:
-
-### Zarządzanie danymi pomiarowymi
-- Przechowywanie pomiarów z różnych serii (temperatura, wilgotność)
-- Obsługa znaczników czasowych dla każdego pomiaru
-- Możliwość definiowania zakresów wartości dla każdej serii
-- Kolorowanie serii dla lepszej wizualizacji
-
-### Interfejs użytkownika
-- Dashboard z wykresami w czasie rzeczywistym
-- Panel administracyjny dla zarządzania danymi
-- Responsywny design obsługujący urządzenia mobilne
-- Intuicyjne formularze do wprowadzania danych
-
-### Bezpieczeństwo
-- System uwierzytelniania oparty na JWT
-- Role użytkowników (Administrator, Użytkownik)
-- Ochrona tras i punktów końcowych API
-- Hashowanie haseł z użyciem BCrypt
-
-### Architektura techniczna
-- Architektura trójwarstwowa (Frontend, Backend, Baza danych)
-- RESTful API z dokumentacją Swagger
-- Konteneryzacja z Docker
-- Baza danych PostgreSQL z optymalizacją
-
-### Funkcjonalności administracyjne
-- Zarządzanie użytkownikami
-- Konfiguracja serii pomiarowych
-- Operacje CRUD na pomiarach
-- Eksport danych
-
----
 
 ## Wsparcie
 
-W przypadku problemów, pytań lub wkładu:
+W przypadku problemów lub pytań:
 - Sprawdź istniejącą dokumentację i dokumenty API Swagger
 - Przejrzyj przewodnik wdrażania w przypadku problemów z konfiguracją
+- Skontatkuj się bezpośrednio z autorem
 
 ## Licencja
 
 Ten projekt jest licencjonowany na licencji MIT - zobacz plik LICENSE, aby uzyskać szczegóły.
 
 ---
-
-Zbudowany przy użyciu Spring Boot, Angular i PostgreSQL
