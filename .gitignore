@@ -80,3 +80,14 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# SSH Keys and sensitive files
+*.pem
+*.key
+
+# Production environment files
+ops/.env.production
+ops/.env.vm-*
+.env.prod
+.env.local
+ops/DEPLOYMENT.md

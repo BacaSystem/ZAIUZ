@@ -29,6 +29,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/measurement")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost", "http://localhost:80"})
 @Tag(name = "Measurements", description = "Operations for querying measurement data")
 public class MeasurementController {
     private final MeasurementService measurementService;

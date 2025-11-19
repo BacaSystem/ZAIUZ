@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/series")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost", "http://localhost:80"})
 @Tag(name = "Series", description = "Operations for managing measurement series")
 public class SeriesController {
     private final SeriesService seriesService;

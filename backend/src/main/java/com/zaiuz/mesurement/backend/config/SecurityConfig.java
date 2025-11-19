@@ -77,7 +77,8 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allow common development and production origins
+        // Allow development origins
+        // For production deployment, add your VM IP or domain to this list
         configuration.setAllowedOrigins(List.of(
             "http://localhost:4200",     // Angular dev server
             "http://localhost:3000",     // Frontend container (port 3000)

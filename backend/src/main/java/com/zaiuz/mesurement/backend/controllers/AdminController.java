@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasAuthority('Admin')")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost", "http://localhost:80"})
 @Tag(name = "Admin", description = "Administrative operations for managing users, series, and measurements")
 @SecurityRequirement(name = "Bearer Authentication")
 public class AdminController {
