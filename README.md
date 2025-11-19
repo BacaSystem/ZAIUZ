@@ -2,6 +2,24 @@
 
 Kompleksowy system zarządzania danymi pomiarowymi IoT zbudowany w oparciu o technologie Spring Boot, Angular i PostgreSQL. Aplikacja zapewnia zbieranie pomiarów w czasie rzeczywistym, wizualizację danych oraz funkcje administracyjne dla danych z czujników IoT.
 
+## Środowisko produkcyjne
+
+Aplikacja jest dostępna w środowisku produkcyjnym na Azure VM:
+
+**URL aplikacji:** [http://51.103.208.127](http://51.103.208.127)
+
+**Dane testowe:**
+- **Administrator**: `admin` / `123456`
+- **Użytkownik**: `user` / `123456`
+
+**Infrastruktura:**
+- Azure VM: Ubuntu 24.04 LTS, 4GB RAM, 2 vCPU
+- Docker Compose: 3 kontenery (Frontend + Backend + PostgreSQL)
+- Nginx: Reverse proxy dla frontend i API
+
+---
+
+
 ## Spis treści
 
 1. [Przegląd](#Przegląd)
@@ -333,8 +351,8 @@ System używa tokenów JWT (JSON Web Tokens) do bezstanowego uwierzytelniania u�
    - Swagger UI: http://localhost:8080/swagger-ui.html
 
 4. Domyślne dane logowania
-   - Admin: `admin` / `password`
-   - User: `user` / `password`
+   - Admin: `admin` / `123456`
+   - User: `user` / `123456`
 
 
 
